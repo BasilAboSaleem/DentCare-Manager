@@ -42,7 +42,7 @@ app.use(session({
 app.use(flash());
 
 // Expose flash + setting globally
-//app.use(require('./middlewares/authMiddlewares').checkIfUser);
+app.use(require('./middlewares/authMiddlewares').checkIfUser);
 app.use((req, res, next) => {
   res.locals.success = req.flash('success');
   res.locals.error = req.flash('error');
