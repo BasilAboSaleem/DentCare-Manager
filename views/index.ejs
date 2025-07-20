@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+ <%- include('./partials/head.ejs') %>
+  <body class="with-welcome-text">
+    <div class="container-scroller">
+    
+      <!-- partial:partials/_navbar.html -->
+      <%- include('./partials/navbar.ejs') %>
+      <!-- partial -->
+      <div class="container-fluid page-body-wrapper">
+        <!-- partial:partials/_sidebar.html -->
+        <%- include('./partials/sidebar.ejs') %>
+        <!-- partial -->
+      <%- include('./partials/main-panel.ejs') %>
+        <!-- partial:partials/footer.ejs -->
+      <%- include('./partials/footer.ejs') %>
+        <!-- main-panel ends -->
+      </div>
+      <!-- page-body-wrapper ends -->
+    </div>
+    <!-- container-scroller -->
+    <!-- plugins:js -->
+    <%- include('./partials/scripts.ejs') %>
+    <!-- End custom js for this page-->
+  </body>
+</html>
