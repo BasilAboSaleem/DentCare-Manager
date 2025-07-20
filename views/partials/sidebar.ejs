@@ -10,15 +10,21 @@
     <% if (user.role === 'doctor') { %>
       <!-- روابط خاصة بالدكتور -->
       <li class="nav-item">
-        <a class="nav-link" href="/patients">
-          <i class="mdi mdi-account-multiple menu-icon"></i>
-          <span class="menu-title">Manage Patients</span>
+        <a class="nav-link" href="/appointments/emergency">
+          <i class="mdi mdi-alert menu-icon"></i>
+          <span class="menu-title">Emergency Cases</span>
         </a>
       </li>
       <li class="nav-item">
         <a class="nav-link" href="/appointments">
           <i class="mdi mdi-calendar-check menu-icon"></i>
-          <span class="menu-title">Appointments</span>
+          <span class="menu-title">My Appointments</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="/patients">
+          <i class="mdi mdi-account-multiple menu-icon"></i>
+          <span class="menu-title">My Patients</span>
         </a>
       </li>
       <li class="nav-item">
@@ -27,14 +33,30 @@
           <span class="menu-title">Profile</span>
         </a>
       </li>
+
     <% } else if (user.role === 'receptionist') { %>
       <!-- روابط خاصة بالسكرتير -->
       <li class="nav-item">
-        <a class="nav-link" href="/schedule">
+        <a class="nav-link" data-bs-toggle="collapse" href="#appointmentsMenu" aria-expanded="false" aria-controls="appointmentsMenu">
           <i class="mdi mdi-calendar-clock menu-icon"></i>
-          <span class="menu-title">Schedule</span>
+          <span class="menu-title">Appointments</span>
+          <i class="menu-arrow"></i>
         </a>
+        <div class="collapse" id="appointmentsMenu">
+          <ul class="nav flex-column sub-menu">
+            <li class="nav-item">
+              <a class="nav-link" href="/appointments/create">Add Appointment</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/appointments/emergency">Emergency Cases</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/appointments">All Appointments</a>
+            </li>
+          </ul>
+        </div>
       </li>
+
       <li class="nav-item">
         <a class="nav-link" href="/patients">
           <i class="mdi mdi-account-multiple menu-icon"></i>
