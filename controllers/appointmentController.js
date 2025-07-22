@@ -137,3 +137,23 @@ exports.edit_appointment_put = async (req, res) => {
     res.redirect(`/appointments/edit/${appointmentId}`);
   }
 }
+
+exports.delete_appointment_delete = async (req, res) => {
+  const appointmentId = req.params.id;
+
+  try {
+    // Delete the appointment by ID
+    const deletedAppointment = await Appointment.findByIdAndDelete(appointmentId);
+
+    if (!deletedAppointment) {
+      return res.status(404).render('pages/error/error-404');
+    }
+
+    req.flash('success', 'Appointment deleted successfully!');
+    res.redirect('/appointments');
+  } catch (error) {
+    console.error('Error deleting appointment:', error);
+    req.flash('error', 'Failed to delete appointment. Please try again.');
+    res.redirect('/appointments');
+  }
+}

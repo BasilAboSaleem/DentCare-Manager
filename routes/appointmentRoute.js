@@ -9,5 +9,6 @@ router.get('/appointments', requireAuth, appointmentController.all_appointments_
 router.get('/appointments/:id', requireAuth, appointmentController.view_appointment_get);
 router.get('/appointments/edit/:id', requireAuth, appointmentController.edit_appointment_get);
 router.put('/appointments/edit/:id', requireAuth, appointmentController.edit_appointment_put);
+router.delete('/appointments/delete/:id', requireAuth, appointmentController.delete_appointment_delete);
 
 module.exports = router;
