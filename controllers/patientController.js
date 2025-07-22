@@ -1,23 +1,33 @@
 const e = require("express");
 const Patient = require("../models/Patient")
 
-exports.all_patients_get= async (req, res) => {
-    try{
-        const patients = await Patient.find();
-        if(!patients){
-            new Patient();
-        }
-        res.render("pages/patients/all-patients", {patients})
+exports.all_patients_get = async (req, res) => {
+  try {
+    const query = req.query.q;
+    let patients;
 
+    if (query) {
+      const regex = new RegExp(query, 'i'); 
+      patients = await Patient.find({
+        $or: [
+          { name: regex },
+          { phone: regex }
+        ]
+      });
+    } else {
+      patients = await Patient.find();
     }
-    catch (err) {
-    console.error("Error logging in:", err);
+
+    res.render("pages/patients/all-patients", { patients, query });
+  } catch (err) {
+    console.error("Error fetching patients:", err);
     res.status(500).render('pages/error/error-500', {
       title: 'Server Error',
       message: 'Something went wrong. Please try again later.'
     });
   }
-}
+};
+
 
 exports.add_patient_get = (req, res) => {
     res.render("pages/patients/add-patient", {

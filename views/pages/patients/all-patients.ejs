@@ -4,76 +4,90 @@
   <body>
     <div class="container-scroller">
       <!-- partial:../../partials/navbar.ejs-->
-       <%- include('../../partials/navbar.ejs') %>
-  
+      <%- include('../../partials/navbar.ejs') %>
+
       <!-- partial -->
       <div class="container-fluid page-body-wrapper">
         <!-- partial:../../partials/_sidebar.ejs -->
-         <%- include('../../partials/sidebar.ejs') %>
-       
+        <%- include('../../partials/sidebar.ejs') %>
+
         <!-- partial -->
         <div class="main-panel">
           <div class="content-wrapper">
-             <% if (error && error.length > 0) { %>
-                <div class="alert alert-danger">
-                  <%= error[0] %>
-                </div>
-              <% } %>
-    
-              <% if (success && success.length > 0) { %>
-                <div class="alert alert-success">
-                  <%= success[0] %>
-                </div>
-              <% } %>
+
+            <% if (error && error.length > 0) { %>
+              <div class="alert alert-danger"><%= error[0] %></div>
+            <% } %>
+
+            <% if (success && success.length > 0) { %>
+              <div class="alert alert-success"><%= success[0] %></div>
+            <% } %>
+
+            <!-- حقل البحث -->
+            <form action="/patients" method="GET" class="mb-3">
+              <div class="input-group">
+                <input type="text" class="form-control" name="q" value="<%= typeof query !== 'undefined' ? query : '' %>" placeholder="Search by name or phone...">
+                <button class="btn btn-primary" type="submit">Search</button>
+              </div>
+            </form>
+
             <div class="row">
               <div class="col-12 grid-margin stretch-card">
                 <div class="card">
                   <div class="card-body">
-                    <h4 class="card-title">Basic Table</h4>
-                    <p class="card-description"> Add class <code>.table</code>
+                    <h4 class="card-title">Patients List</h4>
+                    <p class="card-description">
+                      <% if (query) { %>
+                        Showing results for "<strong><%= query %></strong>"
+                      <% } else { %>
+                        All registered patients
+                      <% } %>
                     </p>
-                    <div class="table-responsive">
-                   <table class="table">
-  <thead>
-    <tr>
-      <th>#</th>
-      <th>Name</th>
-      <th>Phone</th>
-      <th>Created At</th>
-      <th>Actions</th>
-    </tr>
-  </thead>
-  <tbody>
-    
-    <% patients.forEach((patient, index) => { %>
-      <tr>
-        <td><%= index + 1 %></td>
-        <td><%= patient.name %></td>
-        <td><%= patient.phone %></td>
-        <td><%= patient.createdAt.toLocaleDateString() %></td>
-        <td>
-          <a href="/patients/<%= patient._id %>" class="btn btn-sm btn-info">View</a>
-          <a href="/patients/<%= patient._id %>/edit" class="btn btn-sm btn-warning">Edit</a>
-          <form action="/patients/<%= patient._id %>?_method=DELETE" method="POST" style="display:inline;">
-            <button class="btn btn-sm btn-danger" onclick="return confirm('Are you sure?')">Delete</button>
-          </form>
-        </td>
-      </tr>
-    <% }) %>
-  </tbody>
-</table>
 
+                    <div class="table-responsive">
+                      <% if (patients.length === 0) { %>
+                        <p>No patients found.</p>
+                      <% } else { %>
+                        <table class="table">
+                          <thead>
+                            <tr>
+                              <th>#</th>
+                              <th>Name</th>
+                              <th>Phone</th>
+                              <th>Created At</th>
+                              <th>Actions</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <% patients.forEach((patient, index) => { %>
+                              <tr>
+                                <td><%= index + 1 %></td>
+                                <td><%= patient.name %></td>
+                                <td><%= patient.phone %></td>
+                                <td><%= patient.createdAt.toLocaleDateString() %></td>
+                                <td>
+                                  <a href="/patients/<%= patient._id %>" class="btn btn-sm btn-info">View</a>
+                                  <a href="/patients/<%= patient._id %>/edit" class="btn btn-sm btn-warning">Edit</a>
+                                  <form action="/patients/<%= patient._id %>?_method=DELETE" method="POST" style="display:inline;">
+                                    <button class="btn btn-sm btn-danger" onclick="return confirm('Are you sure?')">Delete</button>
+                                  </form>
+                                </td>
+                              </tr>
+                            <% }) %>
+                          </tbody>
+                        </table>
+                      <% } %>
                     </div>
+
                   </div>
                 </div>
               </div>
-           
             </div>
+
           </div>
           <!-- content-wrapper ends -->
           <!-- partial:../../partials/_footer.ejs -->
-        <%- include('../../partials/footer.ejs') %>
-          <!-- partial -->
+          <%- include('../../partials/footer.ejs') %>
         </div>
         <!-- main-panel ends -->
       </div>
@@ -82,8 +96,5 @@
     <!-- container-scroller -->
     <!-- plugins:js -->
     <%- include('../../partials/scripts.ejs') %>
-    <!-- endinject -->
-    <!-- Custom js for this page-->
-    <!-- End custom js for this page-->
   </body>
 </html>
