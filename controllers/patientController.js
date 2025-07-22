@@ -1,3 +1,4 @@
+const e = require("express");
 const Patient = require("../models/Patient")
 
 exports.all_patients_get= async (req, res) => {
@@ -16,4 +17,10 @@ exports.all_patients_get= async (req, res) => {
       message: 'Something went wrong. Please try again later.'
     });
   }
+}
+
+exports.add_patient_get = (req, res) => {
+    res.render("pages/patients/add-patient", {
+        title: "Add Patient"
+    });
 }

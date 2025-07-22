@@ -5,7 +5,7 @@ const patientSchema = new mongoose.Schema({
   phone: { type: String, required: true, trim: true },
   address: { type: String, trim: true },
   dateOfBirth: { type: Date },
-  gender: { type: String, enum: ['male', 'female', 'other'] },
+  gender: { type: String, enum: ['male', 'female'] },
   notes: { type: String, trim: true },
   createdAt: { type: Date, default: Date.now }
 });
