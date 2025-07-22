@@ -58,3 +58,28 @@ exports.add_patient_post = async (req, res) => {
     });
   }
 }
+
+exports.view_patient_get = async (req, res) => {
+  try{
+    const patientId = req.params.id;
+    const patient = await Patient.findById(patientId);
+    if (!patient) {
+      return res.status(404).render('pages/error/error-404', {
+        title: 'Patient Not Found',
+        message: 'The patient you are looking for does not exist.'
+      });
+    }
+
+    res.render('pages/patients/view-patient', {
+      title: 'Patient Details',
+      patient
+    });
+  }
+  catch (err) {
+    console.error("Error fetching patient details:", err);
+    res.status(500).render('pages/error/error-500', {
+      title: 'Server Error',
+      message: 'Something went wrong. Please try again later.'
+    });
+  }
+}

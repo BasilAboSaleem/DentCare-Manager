@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+  <%- include('../../partials/head.ejs') %>
+  <body>
+    <div class="container-scroller">
+      <%- include('../../partials/navbar.ejs') %>
+      <div class="container-fluid page-body-wrapper">
+        <%- include('../../partials/sidebar.ejs') %>
+        <div class="main-panel">
+          <div class="content-wrapper">
+
+            <% if (error && error.length > 0) { %>
+              <div class="alert alert-danger"><%= error[0] %></div>
+            <% } %>
+
+            <div class="row">
+              <div class="col-12 grid-margin stretch-card">
+                <div class="card">
+                  <div class="card-body">
+                    <h4 class="card-title">Patient Details</h4>
+                    <p class="card-description">
+                      Detailed information for patient: <strong><%= patient.name %></strong>
+                    </p>
+
+                    <table class="table table-bordered">
+                      <tbody>
+                        <tr>
+                          <th>Name</th>
+                          <td><%= patient.name %></td>
+                        </tr>
+                        <tr>
+                          <th>Phone</th>
+                          <td><%= patient.phone %></td>
+                        </tr>
+                        <tr>
+                          <th>Address</th>
+                          <td><%= patient.address || 'N/A' %></td>
+                        </tr>
+                        <tr>
+                          <th>Date of Birth</th>
+                          <td>
+                            <% if (patient.dateOfBirth) { %>
+                              <%= patient.dateOfBirth.toLocaleDateString() %>
+                            <% } else { %>
+                              N/A
+                            <% } %>
+                          </td>
+                        </tr>
+                        <tr>
+                          <th>Gender</th>
+                          <td><%= patient.gender ? patient.gender.charAt(0).toUpperCase() + patient.gender.slice(1) : 'N/A' %></td>
+                        </tr>
+                        <tr>
+                          <th>Notes</th>
+                          <td><%= patient.notes || 'N/A' %></td>
+                        </tr>
+                        <tr>
+                          <th>Created At</th>
+                          <td><%= patient.createdAt.toLocaleDateString() %></td>
+                        </tr>
+                      </tbody>
+                    </table>
+
+                    <a href="/patients" class="btn btn-light mt-3">Back to Patients List</a>
+                    <a href="/patients/<%= patient._id %>/edit" class="btn btn-warning mt-3">Edit Patient</a>
+
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+          <%- include('../../partials/footer.ejs') %>
+        </div>
+      </div>
+    </div>
+    <%- include('../../partials/scripts.ejs') %>
+  </body>
+</html>

@@ -34,9 +34,12 @@
             <div class="row">
               <div class="col-12 grid-margin stretch-card">
                 <div class="card">
-                  <div class="card-body">
-                    <h4 class="card-title">Patients List</h4>
-                    <p class="card-description">
+               <div class="card-body">
+  <h4 class="card-title d-flex justify-content-between align-items-center">
+    Patients List
+    <a href="/Patients/add" class="btn btn-success btn-sm">Add New Patient</a>
+  </h4>
+  <p class="card-description">
                       <% if (query) { %>
                         Showing results for "<strong><%= query %></strong>"
                       <% } else { %>
