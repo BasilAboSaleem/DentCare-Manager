@@ -43,3 +43,19 @@ exports.add_appointment_post = async (req, res) => {
     res.redirect('/appointments/add');
   }
 }
+
+exports.all_appointments_get = async (req, res) => {
+  try {
+    // Fetch all appointments with populated patient and doctor details
+    const appointments = await Appointment.find()
+      .populate('patient', 'name');
+
+    res.render('pages/appointment/all-appointments', {
+      title: 'All Appointments',
+      appointments
+    });
+  } catch (error) {
+    console.error('Error fetching appointments:', error);
+    res.status(500).send('Internal Server Error');
+  }
+}

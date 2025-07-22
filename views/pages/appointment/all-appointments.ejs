@@ -1,0 +1,110 @@
+<!-- views/dashboard/appointments/all.ejs -->
+<!DOCTYPE html>
+<html lang="en">
+  <%- include('../../partials/head.ejs') %>
+  <body>
+    <div class="container-scroller">
+      <%- include('../../partials/navbar.ejs') %>
+      <div class="container-fluid page-body-wrapper">
+        <%- include('../../partials/sidebar.ejs') %>
+
+        <div class="main-panel">
+          <div class="content-wrapper">
+
+            <% if (success && success.length > 0) { %>
+              <div class="alert alert-success"><%= success[0] %></div>
+            <% } %>
+            <% if (error && error.length > 0) { %>
+              <div class="alert alert-danger"><%= error[0] %></div>
+            <% } %>
+
+            <div class="row">
+              <div class="col-12 grid-margin">
+                <div class="card">
+                  <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                          <input type="text" id="searchInput" class="form-control w-25" placeholder="Search by patient or doctor...">
+
+                         <a href="/appointments/add" class="btn btn-success">+ New Appointment</a>
+  
+                         </div>
+                    <h4 class="card-title">All Appointments</h4>
+                    <div class="table-responsive">
+                      <table class="table">
+                        <thead>
+                          <tr>
+                            <th>Patient</th>
+                            <th>Date & Time</th>
+                            <th>Case Type</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <% appointments.forEach(appointment => { %>
+                            <tr>
+                              <td><%= appointment.patient.name %></td>
+                              <td><%= appointment.appointmentDate.toLocaleString() %></td>
+                              <td>
+                                <% if (appointment.caseType === 'emergency') { %>
+                                  <span class="badge badge-danger">Emergency</span>
+                                <% } else { %>
+                                  <span class="badge badge-primary">Normal</span>
+                                <% } %>
+                              </td>
+                              <td><%= appointment.status %></td>
+                             <td>
+  <a href="/appointments/<%= appointment._id %>" class="btn btn-sm btn-info">View</a>
+  <a href="/appointments/edit/<%= appointment._id %>" class="btn btn-sm btn-warning">Edit</a>
+  <form action="/appointments/delete/<%= appointment._id %>" method="POST" style="display:inline;">
+    <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure you want to delete this appointment?')">Delete</button>
+  </form>
+</td>
+                            </tr>
+                          <% }) %>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+          <%- include('../../partials/footer.ejs') %>
+        </div>
+      </div>
+    </div>
+<script>
+  const searchInput = document.getElementById('searchInput');
+  const rows = document.querySelectorAll('tbody tr');
+
+  searchInput.addEventListener('input', function () {
+    const query = this.value.toLowerCase();
+
+    rows.forEach(row => {
+      const patient = row.children[0].textContent.toLowerCase();
+      const doctor = row.children[1].textContent.toLowerCase();
+      const date = row.children[2].textContent.toLowerCase();
+      const caseType = row.children[3].textContent.toLowerCase();
+      const status = row.children[4].textContent.toLowerCase();
+
+      if (
+        patient.includes(query) ||
+        doctor.includes(query) ||
+        date.includes(query) ||
+        caseType.includes(query) ||
+        status.includes(query)
+      ) {
+        row.style.display = '';
+      } else {
+        row.style.display = 'none';
+      }
+    });
+  });
+</script>
+
+
+    <%- include('../../partials/scripts.ejs') %>
+  </body>
+</html>
