@@ -1,6 +1,7 @@
 const User = require('../models/User');
 const Appointment = require('../models/Appointment');
 const Patient = require('../models/Patient');
+const e = require('connect-flash');
 
 exports.add_appointment_get = async (req, res) => {
   try {
@@ -16,5 +17,29 @@ exports.add_appointment_get = async (req, res) => {
   } catch (error) {
     console.error('Error fetching doctors or patients:', error);
     res.status(500).send('Internal Server Error');
+  }
+}
+
+exports.add_appointment_post = async (req, res) => {
+  const { patient, doctor, appointmentDate, caseType, notes } = req.body;
+
+  try {
+    // Create a new appointment
+    const newAppointment = new Appointment({
+      patient,
+      doctor,
+      caseType,
+      appointmentDate: caseType === 'emergency' ? new Date() : new Date(appointmentDate),
+      notes
+    });
+
+    await newAppointment.save();
+
+    req.flash('success', 'Appointment created successfully!');
+    res.redirect('/');
+  } catch (error) {
+    console.error('Error creating appointment:', error);
+    req.flash('error', 'Failed to create appointment. Please try again.');
+    res.redirect('/appointments/add');
   }
 }
