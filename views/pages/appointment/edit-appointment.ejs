@@ -1,0 +1,97 @@
+<!-- views/pages/appointment/edit-appointment.ejs -->
+<!DOCTYPE html>
+<html lang="en">
+  <%- include('../../partials/head.ejs') %>
+  <body>
+    <div class="container-scroller">
+      <%- include('../../partials/navbar.ejs') %>
+      <div class="container-fluid page-body-wrapper">
+        <%- include('../../partials/sidebar.ejs') %>
+
+        <div class="main-panel">
+          <div class="content-wrapper">
+
+            <h3>Edit Appointment</h3>
+
+            <div class="card">
+              <div class="card-body">
+
+                <form action="/appointments/edit/<%= appointment._id %>?_method=PUT" method="POST">
+                  <div class="form-group">
+                    <label for="patient">Patient</label>
+                    <select class="form-control" id="patient" name="patient" required>
+                      <% patients.forEach(patient => { %>
+                        <option value="<%= patient._id %>" <%= appointment.patient._id.toString() === patient._id.toString() ? 'selected' : '' %> >
+                          <%= patient.name %>
+                        </option>
+                      <% }) %>
+                    </select>
+                  </div>
+
+                  <div class="form-group">
+                    <label for="doctor">Doctor</label>
+                    <select class="form-control" id="doctor" name="doctor" required>
+                      <% doctors.forEach(doctor => { %>
+                        <option value="<%= doctor._id %>" <%= appointment.doctor._id.toString() === doctor._id.toString() ? 'selected' : '' %> >
+                          <%= doctor.name %>
+                        </option>
+                      <% }) %>
+                    </select>
+                  </div>
+
+                  <div class="form-group">
+                    <label for="caseType">Case Type</label>
+                    <select class="form-control" id="caseType" name="caseType" required>
+                      <option value="normal" <%= appointment.caseType === 'normal' ? 'selected' : '' %>>Normal</option>
+                      <option value="emergency" <%= appointment.caseType === 'emergency' ? 'selected' : '' %>>Emergency</option>
+                    </select>
+                  </div>
+
+                  <div class="form-group" id="appointmentDateGroup">
+                    <label for="appointmentDate">Appointment Date & Time</label>
+                    <input type="datetime-local" class="form-control" id="appointmentDate" name="appointmentDate" value="<%= appointment.appointmentDate.toISOString().slice(0,16) %>" <%= appointment.caseType === 'emergency' ? 'disabled' : '' %> required>
+                  </div>
+
+                  <div class="form-group">
+                    <label for="notes">Notes (optional)</label>
+                    <textarea class="form-control" id="notes" name="notes" rows="3"><%= appointment.notes %></textarea>
+                  </div>
+
+                  <button type="submit" class="btn btn-primary">Update Appointment</button>
+                  <a href="/appointments" class="btn btn-light">Cancel</a>
+                </form>
+
+              </div>
+            </div>
+
+          </div>
+          <%- include('../../partials/footer.ejs') %>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      const caseTypeSelect = document.getElementById('caseType');
+      const dateGroup = document.getElementById('appointmentDateGroup');
+      const appointmentDateInput = document.getElementById('appointmentDate');
+
+      caseTypeSelect.addEventListener('change', function () {
+        if (this.value === 'emergency') {
+          dateGroup.style.display = 'none';
+          appointmentDateInput.value = '';
+          appointmentDateInput.disabled = true;
+        } else {
+          dateGroup.style.display = 'block';
+          appointmentDateInput.disabled = false;
+        }
+      });
+
+      // Trigger change event on load to set initial state
+      window.addEventListener('DOMContentLoaded', () => {
+        caseTypeSelect.dispatchEvent(new Event('change'));
+      });
+    </script>
+
+    <%- include('../../partials/scripts.ejs') %>
+  </body>
+</html>

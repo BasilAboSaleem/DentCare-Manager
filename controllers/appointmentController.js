@@ -82,3 +82,30 @@ exports.view_appointment_get = async (req, res) => {
     res.status(500).send('Internal Server Error');
   }
 }
+
+exports.edit_appointment_get = async (req, res) => {
+  const appointmentId = req.params.id;
+
+  try {
+    // Fetch the appointment by ID and populate patient and doctor details
+    const appointment = await Appointment.findById(appointmentId)
+      .populate('patient', 'name')
+      .populate('doctor', 'name');
+
+    if (!appointment) {
+      return res.status(404).send('Appointment not found');
+    }
+    const doctors = await User.find({ role: 'doctor' });
+    const patients = await Patient.find();
+
+    res.render('pages/appointment/edit-appointment', {
+      title: 'Edit Appointment',
+      appointment,
+      doctors,
+      patients
+    });
+  } catch (error) {
+    console.error('Error fetching appointment:', error);
+    res.status(500).send('Internal Server Error');
+  }
+}
