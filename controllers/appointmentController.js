@@ -70,7 +70,7 @@ exports.view_appointment_get = async (req, res) => {
       .populate('doctor', 'name');
 
     if (!appointment) {
-      return res.status(404).send('Appointment not found');
+      return res.status(404).render('pages/error/error-404');
     }
 
     res.render('pages/appointment/view-appointment', {
@@ -93,7 +93,7 @@ exports.edit_appointment_get = async (req, res) => {
       .populate('doctor', 'name');
 
     if (!appointment) {
-      return res.status(404).send('Appointment not found');
+      return res.status(404).render('pages/error/error-404');
     }
     const doctors = await User.find({ role: 'doctor' });
     const patients = await Patient.find();
@@ -107,5 +107,33 @@ exports.edit_appointment_get = async (req, res) => {
   } catch (error) {
     console.error('Error fetching appointment:', error);
     res.status(500).send('Internal Server Error');
+  }
+}
+
+exports.edit_appointment_put = async (req, res) => {
+  const appointmentId = req.params.id;
+  const { patient, doctor, appointmentDate, caseType, notes } = req.body;
+
+  try {
+    // Update the appointment details
+    const updatedAppointment = await Appointment.findById(appointmentId);
+    if (!updatedAppointment) {
+      return res.status(404).render('pages/error/error-404')
+    }
+
+    updatedAppointment.patient = patient || updatedAppointment.patient;
+    updatedAppointment.doctor = doctor || updatedAppointment.doctor;
+    updatedAppointment.caseType = caseType || updatedAppointment.caseType;
+    updatedAppointment.appointmentDate = caseType === 'emergency' ? new Date() : new Date(appointmentDate) || updatedAppointment.appointmentDate;
+    updatedAppointment.notes = notes || updatedAppointment.notes;
+
+    await updatedAppointment.save();
+
+    req.flash('success', 'Appointment updated successfully!');
+    res.redirect(`/appointments/${appointmentId}`);
+  } catch (error) {
+    console.error('Error updating appointment:', error);
+    req.flash('error', 'Failed to update appointment. Please try again.');
+    res.redirect(`/appointments/edit/${appointmentId}`);
   }
 }

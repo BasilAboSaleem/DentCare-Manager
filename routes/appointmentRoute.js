@@ -8,5 +8,6 @@ router.post('/appointments/add', requireAuth, appointmentController.add_appointm
 router.get('/appointments', requireAuth, appointmentController.all_appointments_get);
 router.get('/appointments/:id', requireAuth, appointmentController.view_appointment_get);
 router.get('/appointments/edit/:id', requireAuth, appointmentController.edit_appointment_get);
+router.put('/appointments/edit/:id', requireAuth, appointmentController.edit_appointment_put);
 
 module.exports = router;
