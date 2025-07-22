@@ -140,3 +140,26 @@ exports.edit_patient_put = async (req, res) => {
     });
   }
 };
+
+exports.delete_patient_delete = async (req, res) => {
+  try {
+    const patientId = req.params.id;
+    const patient = await Patient.findByIdAndDelete(patientId);
+    
+    if (!patient) {
+      return res.status(404).render('pages/error/error-404', {
+        title: 'Patient Not Found',
+        message: 'No patient found with the given ID.'
+      });
+    }
+
+    req.flash("success", "Patient deleted successfully");
+    res.redirect("/Patients");
+  } catch (err) {
+    console.error("Error deleting patient:", err);
+    res.status(500).render('pages/error/error-500', {
+      title: 'Server Error',
+      message: 'Something went wrong. Please try again later.'
+    });
+  }
+};
