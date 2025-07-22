@@ -75,19 +75,28 @@
         </div>
       </div>
     </div>
-    <script>
+<script>
   const caseTypeSelect = document.getElementById('caseType');
   const dateGroup = document.getElementById('appointmentDateGroup');
+  const appointmentDateInput = document.getElementById('appointmentDate');
 
   caseTypeSelect.addEventListener('change', function () {
     if (this.value === 'emergency') {
       dateGroup.style.display = 'none';
-      document.getElementById('appointmentDate').value = ''; // clear value
+      appointmentDateInput.value = '';
+      appointmentDateInput.removeAttribute('required');
     } else {
       dateGroup.style.display = 'block';
+      appointmentDateInput.setAttribute('required', 'required');
     }
   });
+
+  // Trigger change event on page load to handle default selection
+  window.addEventListener('DOMContentLoaded', function () {
+    caseTypeSelect.dispatchEvent(new Event('change'));
+  });
 </script>
+
     <%- include('../../partials/scripts.ejs') %>
   </body>
 </html>

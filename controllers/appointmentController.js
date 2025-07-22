@@ -36,7 +36,7 @@ exports.add_appointment_post = async (req, res) => {
     await newAppointment.save();
 
     req.flash('success', 'Appointment created successfully!');
-    res.redirect('/');
+    res.redirect('/appointments');
   } catch (error) {
     console.error('Error creating appointment:', error);
     req.flash('error', 'Failed to create appointment. Please try again.');
