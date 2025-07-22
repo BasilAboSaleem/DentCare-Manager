@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+  <%- include('../../partials/head.ejs') %>
+  <body>
+    <div class="container-scroller">
+      <%- include('../../partials/navbar.ejs') %>
+      <div class="container-fluid page-body-wrapper">
+        <%- include('../../partials/sidebar.ejs') %>
+        <div class="main-panel">
+          <div class="content-wrapper">
+
+            <% if (error && error.length > 0) { %>
+              <div class="alert alert-danger"><%= error[0] %></div>
+            <% } %>
+
+            <div class="row">
+              <div class="col-12 grid-margin stretch-card">
+                <div class="card">
+                  <div class="card-body">
+                    <h4 class="card-title">New Appointment</h4>
+                    <p class="card-description">Fill the form below to schedule a new appointment</p>
+
+                    <form action="/appointments" method="POST">
+                      <div class="form-group">
+                        <label for="patient">Patient</label>
+                        <select class="form-control" id="patient" name="patient" required>
+                          <option value="" disabled selected>Select a patient</option>
+                          <% patients.forEach(patient => { %>
+                            <option value="<%= patient._id %>"><%= patient.name %></option>
+                          <% }) %>
+                        </select>
+                      </div>
+
+                      <div class="form-group">
+                        <label for="doctor">Doctor</label>
+                        <select class="form-control" id="doctor" name="doctor" required>
+                          <option value="" disabled selected>Select a doctor</option>
+                          <% doctors.forEach(doctor => { %>
+                            <option value="<%= doctor._id %>"><%= doctor.name %></option>
+                          <% }) %>
+                        </select>
+                      </div>
+
+                        <div class="form-group">
+                        <label for="caseType">Case Type</label>
+                        <select class="form-control" id="caseType" name="caseType" required>
+                          <option value="normal" selected>Normal</option>
+                          <option value="emergency">Emergency</option>
+                        </select>
+                      </div>
+
+                      <div class="form-group" id="appointmentDateGroup">
+                        <label for="appointmentDate">Appointment Date & Time</label>
+                        <input type="datetime-local" class="form-control" id="appointmentDate" name="appointmentDate" required>
+                      </div>
+
+                    
+
+                      <div class="form-group">
+                        <label for="notes">Notes (optional)</label>
+                        <textarea class="form-control" id="notes" name="notes" rows="3"></textarea>
+                      </div>
+
+                      <button type="submit" class="btn btn-primary">Schedule Appointment</button>
+                      <a href="/appointments" class="btn btn-light">Cancel</a>
+                    </form>
+
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+          <%- include('../../partials/footer.ejs') %>
+        </div>
+      </div>
+    </div>
+    <script>
+  const caseTypeSelect = document.getElementById('caseType');
+  const dateGroup = document.getElementById('appointmentDateGroup');
+
+  caseTypeSelect.addEventListener('change', function () {
+    if (this.value === 'emergency') {
+      dateGroup.style.display = 'none';
+      document.getElementById('appointmentDate').value = ''; // clear value
+    } else {
+      dateGroup.style.display = 'block';
+    }
+  });
+</script>
+    <%- include('../../partials/scripts.ejs') %>
+  </body>
+</html>
