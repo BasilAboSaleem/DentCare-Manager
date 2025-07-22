@@ -9,5 +9,6 @@ router.get('/Patients/add', requireAuth, patientController.add_patient_get);
 router.post('/Patients/add', requireAuth, patientController.add_patient_post);
 router.get('/patients/:id', requireAuth, patientController.view_patient_get);
 router.get('/patients/:id/edit', requireAuth, patientController.edit_patient_get); 
+router.put('/patients/:id/edit', requireAuth, patientController.edit_patient_put);
 
 module.exports = router;

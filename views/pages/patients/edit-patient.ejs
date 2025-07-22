@@ -20,7 +20,7 @@
                     <h4 class="card-title">Edit Patient</h4>
                     <p class="card-description">Update patient information below</p>
 
-                    <form action="/patients/<%= patient._id %>?_method=PUT" method="POST">
+                    <form action="/patients/<%= patient._id %>/edit?_method=PUT" method="POST">
                       <div class="form-group">
                         <label for="name">Name</label>
                         <input type="text" class="form-control" id="name" name="name" value="<%= patient.name %>" required>
