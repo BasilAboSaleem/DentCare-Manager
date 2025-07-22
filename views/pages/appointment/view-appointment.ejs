@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+  <%- include('../../partials/head.ejs') %>
+  <body>
+    <div class="container-scroller">
+      <%- include('../../partials/navbar.ejs') %>
+      <div class="container-fluid page-body-wrapper">
+        <%- include('../../partials/sidebar.ejs') %>
+
+        <div class="main-panel">
+          <div class="content-wrapper">
+
+            <h3>Appointment Details</h3>
+
+            <div class="card">
+              <div class="card-body">
+                <h4 class="card-title">Appointment Information</h4>
+
+                <dl class="row">
+                  <dt class="col-sm-3">Patient Name:</dt>
+                  <dd class="col-sm-9"><%= appointment.patient.name %></dd>
+
+                  <dt class="col-sm-3">Doctor Name:</dt>
+                  <dd class="col-sm-9"><%= appointment.doctor.name %></dd>
+
+                  <dt class="col-sm-3">Appointment Date & Time:</dt>
+                  <dd class="col-sm-9"><%= appointment.appointmentDate.toLocaleString() %></dd>
+
+                  <dt class="col-sm-3">Case Type:</dt>
+                  <dd class="col-sm-9">
+                    <% if (appointment.caseType === 'emergency') { %>
+                      <span class="badge badge-danger">Emergency</span>
+                    <% } else { %>
+                      <span class="badge badge-primary">Normal</span>
+                    <% } %>
+                  </dd>
+
+                  <dt class="col-sm-3">Status:</dt>
+                  <dd class="col-sm-9"><%= appointment.status.charAt(0).toUpperCase() + appointment.status.slice(1) %></dd>
+
+                  <dt class="col-sm-3">Notes:</dt>
+                  <dd class="col-sm-9"><%= appointment.notes || 'No additional notes' %></dd>
+                </dl>
+
+                <a href="/appointments" class="btn btn-light">Back to All Appointments</a>
+                <a href="/appointments/edit/<%= appointment._id %>" class="btn btn-warning">Edit Appointment</a>
+              </div>
+            </div>
+
+          </div>
+          <%- include('../../partials/footer.ejs') %>
+        </div>
+      </div>
+    </div>
+    <%- include('../../partials/scripts.ejs') %>
+  </body>
+</html>
