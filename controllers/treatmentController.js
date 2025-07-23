@@ -72,3 +72,25 @@ exports.edit_treatment_get = async (req, res) => {
     res.status(500).render('pages/error/error-500', { title: 'Error' });
   }
 }
+
+exports.edit_treatment_put = async (req, res) => {
+  const { id } = req.params;
+  const { name, description, price } = req.body;
+
+  try {
+    const treatment = await Treatment.findById(id);
+    if (!treatment) {
+      req.flash('error', 'Treatment not found');
+      return res.redirect('/treatments');
+    }
+    treatment.name = name || treatment.name;
+    treatment.description = description || treatment.description;
+    treatment.price = price || treatment.price;
+    await treatment.save();
+    req.flash('success', 'Treatment updated successfully');
+    res.redirect(`/treatments/${id}`);
+    } catch (error) {
+    console.error("Error updating treatment:", error);
+    res.status(500).render('pages/error/error-500', { title: 'Error' });
+  }
+}

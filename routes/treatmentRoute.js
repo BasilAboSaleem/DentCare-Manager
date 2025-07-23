@@ -8,5 +8,6 @@ router.post('/treatments/add', requireAuth, treatmentController.add_treatment_po
 router.get('/treatments', requireAuth, treatmentController.all_treatments_get);
 router.get('/treatments/:id', requireAuth, treatmentController.view_treatment_get);
 router.get('/treatments/:id/edit', requireAuth, treatmentController.edit_treatment_get);
+router.put('/treatments/:id/edit', requireAuth, treatmentController.edit_treatment_put);
 
 module.exports = router;
