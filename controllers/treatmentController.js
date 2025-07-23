@@ -56,3 +56,19 @@ exports.view_treatment_get = async (req, res) => {
     res.redirect('/treatments');
   }
 }
+
+exports.edit_treatment_get = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const treatment = await Treatment.findById(id);
+    if (!treatment) {
+      req.flash('error', 'Treatment not found');
+      return res.redirect('/treatments');
+    }
+    res.render('pages/treatments/edit-treatment', { title: 'Edit Treatment', treatment });
+  } catch (error) {
+    console.error("Error fetching treatment for edit:", error);
+    res.status(500).render('pages/error/error-500', { title: 'Error' });
+  }
+}
