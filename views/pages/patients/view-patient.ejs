@@ -65,7 +65,9 @@
                     </table>
 
                     <a href="/patients" class="btn btn-light mt-3">Back to Patients List</a>
-                    <a href="/patients/<%= patient._id %>/edit" class="btn btn-warning mt-3">Edit Patient</a>
+                    <% if (user.role === 'receptionist') { %>
+                      <a href="/patients/<%= patient._id %>/edit" class="btn btn-warning mt-3">Edit Patient</a>
+                    <% } %>
 
                   </div>
                 </div>

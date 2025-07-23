@@ -7,33 +7,47 @@
       </a>
     </li>
 
-    <% if (user.role === 'doctor') { %>
-      <!-- روابط خاصة بالدكتور -->
+   <% if (user.role === 'doctor') { %>
+      <!-- Emergency Cases -->
       <li class="nav-item">
         <a class="nav-link" href="/appointments/emergency">
-          <i class="mdi mdi-alert menu-icon"></i>
+          <i class="mdi mdi-alert-circle menu-icon"></i>
           <span class="menu-title">Emergency Cases</span>
         </a>
       </li>
-      <li class="nav-item">
-  <a class="nav-link" href="/appointments/emergency">
-    <i class="mdi mdi-alert-circle menu-icon"></i>
-    <span class="menu-title">Emergency Cases</span>
-  </a>
-</li>
 
+      <!-- All Patients -->
       <li class="nav-item">
         <a class="nav-link" href="/patients">
           <i class="mdi mdi-account-multiple menu-icon"></i>
           <span class="menu-title">My Patients</span>
         </a>
       </li>
+
+      <!-- All Appointments -->
+      <li class="nav-item">
+        <a class="nav-link" href="/appointments">
+          <i class="mdi mdi-calendar-clock menu-icon"></i>
+          <span class="menu-title">Appointments</span>
+        </a>
+      </li>
+
+      <!-- Treatments (View Only) -->
+      <li class="nav-item">
+        <a class="nav-link" href="/treatments">
+          <i class="mdi mdi-hospital menu-icon"></i>
+          <span class="menu-title">Treatments</span>
+        </a>
+      </li>
+
+      <!-- Profile -->
       <li class="nav-item">
         <a class="nav-link" href="/profile">
           <i class="mdi mdi-account menu-icon"></i>
           <span class="menu-title">Profile</span>
         </a>
       </li>
+    
 
     <% } else if (user.role === 'receptionist') { %>
       <!-- روابط خاصة بالسكرتير -->

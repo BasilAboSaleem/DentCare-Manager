@@ -34,7 +34,9 @@
                 </dl>
 
                 <a href="/treatments" class="btn btn-light">Back to All Treatments</a>
-                <a href="/treatments/<%= treatment._id %>/edit" class="btn btn-warning">Edit Treatment</a>
+                <% if (user.role === 'receptionist') { %>
+                  <a href="/treatments/<%= treatment._id %>/edit" class="btn btn-warning">Edit Treatment</a>
+                <% } %>
               </div>
             </div>
 
