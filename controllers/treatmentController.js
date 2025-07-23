@@ -24,3 +24,18 @@ exports.add_treatment_post = async (req, res) => {
     res.redirect('/treatments/add');
   }
 }
+
+exports.all_treatments_get = async (req, res) => {
+  try {
+    const treatments = await Treatment.find();
+    res.render('pages/treatments/all-treatments', { 
+      title: 'All Treatments', 
+      treatments, 
+    
+    });
+  } catch (error) {
+    console.error("Error fetching treatments:", error);
+    req.flash('error', 'Failed to fetch treatments');
+    res.redirect('/treatments/add');
+  }
+}
