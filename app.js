@@ -74,12 +74,14 @@ const authRoute = require('./routes/authRoute');
 const patientRoute = require('./routes/patientRoute');
 const appointmentRoute = require('./routes/appointmentRoute');
 const treatmentRoute = require('./routes/treatmentRoute');
+const visitRoute = require('./routes/visitRoute');
 
 app.use(coreRoute);
 app.use(authRoute);
 app.use(patientRoute);
 app.use(appointmentRoute);
 app.use(treatmentRoute);
+app.use(visitRoute);
 
 
 

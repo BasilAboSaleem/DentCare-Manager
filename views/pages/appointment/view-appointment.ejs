@@ -46,6 +46,9 @@
                 </dl>
 
                 <a href="/appointments" class="btn btn-light">Back to All Appointments</a>
+                  <% if (user.role === 'doctor') { %>
+<a href="/visits/start/<%= appointment._id %>" class="btn  btn-primary">Start Visit</a>
+  <% } %>
                 <% if (user.role === 'receptionist') { %>
                   <a href="/appointments/edit/<%= appointment._id %>" class="btn btn-warning">Edit Appointment</a>
                 <% } %>
