@@ -47,6 +47,20 @@ const checkIfUser =  (req, res, next) => {
 };
 
 //دوال لفحص صلاحيات المستخدم
+const isDoctor = (req, res, next) => {
+  if (req.user && req.user.role === 'doctor') {
+    next();
+  } else {
+    res.status(403).send('Access denied');
+  }
+};
+const isReceptionist = (req, res, next) => {
+  if (req.user && req.user.role === 'receptionist') {
+    next();
+  } else {
+    res.status(403).send('Access denied');
+  }
+};
 
 
 // استيراد مكتبة rate-limit الخاصة بتقييد محاولات تسجيل الدخول
@@ -63,6 +77,8 @@ const loginLimiter = rateLimit({
 module.exports = {
     requireAuth,
     checkIfUser,
+    isDoctor,
+    isReceptionist,
     loginLimiter
  
 }
