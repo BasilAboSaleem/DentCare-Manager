@@ -73,18 +73,15 @@ const coreRoute = require('./routes/coreRoute');
 const authRoute = require('./routes/authRoute'); 
 const patientRoute = require('./routes/patientRoute');
 const appointmentRoute = require('./routes/appointmentRoute');
+const treatmentRoute = require('./routes/treatmentRoute');
 
 app.use(coreRoute);
 app.use(authRoute);
 app.use(patientRoute);
 app.use(appointmentRoute);
+app.use(treatmentRoute);
 
-/*const coreRoute = require('./routes/coreRoute');
-const authRoute = require('./routes/authRoute');
-const dashboardRoute = require('./routes/dashboardRoute');
-app.use(coreRoute);
-app.use(authRoute);
-app.use(dashboardRoute);*/
+
 
 // Connect DB + Start
 const port = process.env.PORT || 3001;
