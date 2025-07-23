@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+  <%- include('../../partials/head.ejs') %>
+  <body>
+    <div class="container-scroller">
+      <%- include('../../partials/navbar.ejs') %>
+      <div class="container-fluid page-body-wrapper">
+        <%- include('../../partials/sidebar.ejs') %>
+
+        <div class="main-panel">
+          <div class="content-wrapper">
+            <% if (success && success.length > 0) { %>
+              <div class="alert alert-success"><%= success[0] %></div>
+            <% } %>
+
+            <h3>Treatment Details</h3>
+
+            <div class="card">
+              <div class="card-body">
+                <h4 class="card-title">Treatment Information</h4>
+
+                <dl class="row">
+                  <dt class="col-sm-3">Treatment Name:</dt>
+                  <dd class="col-sm-9"><%= treatment.name %></dd>
+
+                  <dt class="col-sm-3">Price:</dt>
+                  <dd class="col-sm-9"><%= treatment.price.toFixed(2) %></dd>
+
+                  <dt class="col-sm-3">Description:</dt>
+                  <dd class="col-sm-9"><%= treatment.description || 'No description available' %></dd>
+
+                  <dt class="col-sm-3">Created At:</dt>
+                  <dd class="col-sm-9"><%= treatment.createdAt.toLocaleDateString() %></dd>
+                </dl>
+
+                <a href="/treatments" class="btn btn-light">Back to All Treatments</a>
+                <a href="/treatments/<%= treatment._id %>/edit" class="btn btn-warning">Edit Treatment</a>
+              </div>
+            </div>
+
+          </div>
+          <%- include('../../partials/footer.ejs') %>
+        </div>
+      </div>
+    </div>
+    <%- include('../../partials/scripts.ejs') %>
+  </body>
+</html>

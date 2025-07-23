@@ -39,3 +39,20 @@ exports.all_treatments_get = async (req, res) => {
     res.redirect('/treatments/add');
   }
 }
+
+exports.view_treatment_get = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const treatment = await Treatment.findById(id);
+    if (!treatment) {
+      req.flash('error', 'Treatment not found');
+      return res.redirect('/treatments');
+    }
+    res.render('pages/treatments/view-treatment', { title: 'View Treatment', treatment });
+  } catch (error) {
+    console.error("Error fetching treatment:", error);
+    req.flash('error', 'Failed to fetch treatment');
+    res.redirect('/treatments');
+  }
+}

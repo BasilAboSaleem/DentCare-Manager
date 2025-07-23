@@ -6,5 +6,6 @@ const { requireAuth } = require('../middlewares/authMiddlewares');
 router.get('/treatments/add', requireAuth, treatmentController.add_treatment_get);
 router.post('/treatments/add', requireAuth, treatmentController.add_treatment_post); 
 router.get('/treatments', requireAuth, treatmentController.all_treatments_get);
+router.get('/treatments/:id', requireAuth, treatmentController.view_treatment_get);
 
 module.exports = router;
