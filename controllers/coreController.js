@@ -1,33 +1,50 @@
+const { startOfDay, endOfDay, subDays } = require('date-fns');
 const User = require('../models/User');
 const Appointment = require('../models/Appointment');
 const Patient = require('../models/Patient');
 
-
 exports.index_get = async (req, res) => {
-  try{
-    const startOfDay = new Date();
-    startOfDay.setHours(0,0,0,0);
+  try {
+    // تحديد بداية ونهاية اليوم
+    const todayStart = startOfDay(new Date());
+    const todayEnd = endOfDay(new Date());
 
-    const endOfDay = new Date();
-    endOfDay.setHours(23,59,59,999);
-
-    const appointments = await Appointment.find({
-      appointmentDate: { $gte: startOfDay, $lte: endOfDay }
-    })
-    .populate('patient', 'name')
-    .populate('doctor', 'name');
-
-    res.render('index', {
-      title: 'Dashboard',
-      appointments
+    // الإحصائيات
+    const totalPatients = await Patient.countDocuments();
+    const totalAppointments = await Appointment.countDocuments();
+    const todayAppointments = await Appointment.countDocuments({
+      appointmentDate: { $gte: todayStart, $lte: todayEnd }
+    });
+    const emergencyCases = await Appointment.countDocuments({ caseType: 'emergency' });
+    const completedVisits = await Appointment.countDocuments({ status: 'completed' });
+    const newPatientsCount = await Patient.countDocuments({
+      createdAt: { $gte: subDays(new Date(), 7) } // آخر 7 أيام
     });
 
-  
-  }catch (error) {
+    // مواعيد اليوم
+    const appointments = await Appointment.find({
+      appointmentDate: { $gte: todayStart, $lte: todayEnd }
+    })
+      .populate('patient', 'name')
+      .populate('doctor', 'name');
+
+    // عرض الصفحة
+    res.render('index', {
+      title: 'Dashboard',
+      appointments,
+      stats: {
+        totalPatients,
+        totalAppointments,
+        todayAppointments,
+        emergencyCases,
+        completedVisits,
+        newPatientsCount
+      }
+    });
+  } catch (error) {
     console.error('Error fetching index page:', error);
     res.status(500).render('pages/error/error-500', {
       title: 'Internal Server Error'
     });
   }
 };
- 
