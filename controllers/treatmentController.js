@@ -1,3 +1,4 @@
+const e = require('express');
 const Treatment = require('../models/Treatment');
 
 
@@ -92,5 +93,23 @@ exports.edit_treatment_put = async (req, res) => {
     } catch (error) {
     console.error("Error updating treatment:", error);
     res.status(500).render('pages/error/error-500', { title: 'Error' });
+  }
+}
+
+exports.delete_treatment_delete = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const treatment = await Treatment.findByIdAndDelete(id);
+    if (!treatment) {
+      req.flash('error', 'Treatment not found');
+      return res.redirect('/treatments');
+    }
+    req.flash('success', 'Treatment deleted successfully');
+    res.redirect('/treatments');
+  } catch (error) {
+    console.error("Error deleting treatment:", error);
+    req.flash('error', 'Failed to delete treatment');
+    res.redirect('/treatments');
   }
 }
