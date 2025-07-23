@@ -37,7 +37,9 @@
                <div class="card-body">
   <h4 class="card-title d-flex justify-content-between align-items-center">
     Patients List
+    <% if (user.role === 'receptionist') { %>
     <a href="/Patients/add" class="btn btn-success btn-sm">Add New Patient</a>
+    <% } %>
   </h4>
   <p class="card-description">
                       <% if (query) { %>
@@ -70,7 +72,7 @@
                                 <td><%= patient.createdAt.toLocaleDateString() %></td>
                                 <td>
                                   <a href="/patients/<%= patient._id %>" class="btn btn-sm btn-info">View</a>
-                                    <% if (user.role !== 'receptionist') { %>
+                                    <% if (user.role === 'receptionist') { %>
 
                                   <a href="/patients/<%= patient._id %>/edit" class="btn btn-sm btn-warning">Edit</a>
                                   <form action="/patients/<%= patient._id %>/delete?_method=DELETE" method="POST" style="display:inline;">
