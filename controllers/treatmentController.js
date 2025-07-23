@@ -18,11 +18,10 @@ exports.add_treatment_post = async (req, res) => {
 
     await newTreatment.save();
     req.flash('success', 'Treatment added successfully');
-    res.redirect('/treatments/add');
+    res.redirect('/treatments');
   } catch (error) {
     console.error("Error adding treatment:", error);
-    req.flash('error', 'Failed to add treatment');
-    res.redirect('/treatments/add');
+    res.status(500).render('pages/error/error-500', { title: 'Error' });
   }
 }
 
@@ -109,7 +108,7 @@ exports.delete_treatment_delete = async (req, res) => {
     res.redirect('/treatments');
   } catch (error) {
     console.error("Error deleting treatment:", error);
-    req.flash('error', 'Failed to delete treatment');
-    res.redirect('/treatments');
+    res.status(500).render('pages/error/error-500', { title: 'Error' });
+  
   }
 }
