@@ -10,4 +10,4 @@ const paymentSchema = new mongoose.Schema({
   note: { type: String } // Optional (مثلاً: دفعة على زيارة 3، أو دفعة مسبقة)
 });
 
-const Payment = mongoose.model('Payment', paymentSchema);
+module.exports = mongoose.model('Payment', paymentSchema);
