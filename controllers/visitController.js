@@ -142,5 +142,28 @@ exports.view_visit_get = async (req, res) => {
   }
 };
 
+exports.today_visits_get = async (req, res) => {
+  try {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0); // بداية اليوم
+    const tomorrow = new Date(today);
+    tomorrow.setDate(tomorrow.getDate() + 1); // بداية اليوم التالي
+
+    const visits = await Visit.find({
+      visitDate: {
+        $gte: today,
+        $lt: tomorrow
+      }
+    })
+    .populate('patient', 'name')
+    .populate('doctor', 'name role')
+    .sort({ visitDate: -1 });
+
+    res.render('pages/visit/today-visits', { title: 'Today\'s Visits', visits });
+  } catch (error) {
+    console.error("Error fetching today's visits:", error);
+    res.status(500).render('pages/error/error-500', { title: 'Error', message: 'Failed to fetch today\'s visits' });
+  }
+}
     
  

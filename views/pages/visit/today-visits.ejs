@@ -1,0 +1,120 @@
+<!-- views/dashboard/visits/all.ejs -->
+<!DOCTYPE html>
+<html lang="en">
+  <%- include('../../partials/head.ejs') %>
+  <body>
+    <div class="container-scroller">
+      <%- include('../../partials/navbar.ejs') %>
+      <div class="container-fluid page-body-wrapper">
+        <%- include('../../partials/sidebar.ejs') %>
+
+        <div class="main-panel">
+          <div class="content-wrapper">
+
+            <% if (success && success.length > 0) { %>
+              <div class="alert alert-success"><%= success[0] %></div>
+            <% } %>
+            <% if (error && error.length > 0) { %>
+              <div class="alert alert-danger"><%= error[0] %></div>
+            <% } %>
+
+            <div class="row">
+              <div class="col-12 grid-margin">
+                <div class="card">
+                  <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                      <input type="text" id="searchInput" class="form-control w-25" placeholder="Search by patient or doctor...">
+                    </div>
+                    <h4 class="card-title">Today's Visits</h4>
+                    <div class="table-responsive">
+                      <table class="table">
+                        <thead>
+                          <tr>
+                            <th>Patient</th>
+                            <th>Visit Date</th>
+                            <th>Total Amount</th>
+                            <th>Payment Status</th>
+                            <th>Actions</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <% visits.forEach(visit => { %>
+                            <tr>
+                              <td><%= visit.patient.name %></td>
+                              <td><%= new Date(visit.visitDate).toLocaleDateString() %></td>
+                              <td><%= visit.totalAmount.toFixed(2) %></td>
+                              <td>
+                                <% if (visit.paymentStatus === 'paid') { %>
+                                  <span class="badge badge-success">Paid</span>
+                                <% } else if (visit.paymentStatus === 'partial') { %>
+                                  <span class="badge badge-warning">Partial</span>
+                                <% } else { %>
+                                  <span class="badge badge-danger">Unpaid</span>
+                                <% } %>
+                              </td>
+                             <td>
+  
+  <a href="/visits/<%= visit._id %>" class="btn btn-sm btn-primary me-1">
+    <i class="mdi mdi-eye"></i> View
+  </a>
+
+ 
+  <% if (user.role === 'doctor' && visit.paymentStatus === 'unpaid') { %>
+    <a href="/visits/edit/<%= visit._id %>" class="btn btn-sm btn-warning me-1">
+      <i class="mdi mdi-pencil"></i> Edit
+    </a>
+  <% } %>
+
+  
+  <% if (user.role === 'receptionist' && visit.paymentStatus !== 'paid') { %>
+    <a href="/payments/<%= visit._id %>" class="btn btn-sm btn-success">
+      <i class="mdi mdi-cash-multiple"></i> Payment
+    </a>
+  <% } %>
+</td>
+
+                            </tr>
+                          <% }) %>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+          <%- include('../../partials/footer.ejs') %>
+        </div>
+      </div>
+    </div>
+
+<script>
+  const searchInput = document.getElementById('searchInput');
+  const rows = document.querySelectorAll('tbody tr');
+
+  searchInput.addEventListener('input', function () {
+    const query = this.value.toLowerCase();
+    rows.forEach(row => {
+      const patient = row.children[0].textContent.toLowerCase();
+      const date = row.children[2].textContent.toLowerCase();
+      const total = row.children[3].textContent.toLowerCase();
+      const status = row.children[4].textContent.toLowerCase();
+
+      if (
+        patient.includes(query) ||
+        date.includes(query) ||
+        total.includes(query) ||
+        status.includes(query)
+      ) {
+        row.style.display = '';
+      } else {
+        row.style.display = 'none';
+      }
+    });
+  });
+</script>
+
+<%- include('../../partials/scripts.ejs') %>
+  </body>
+</html>
