@@ -157,3 +157,20 @@ exports.delete_appointment_delete = async (req, res) => {
     res.redirect('/appointments');
   }
 }
+
+exports.emergency_appointments_get = async (req, res) => {
+  try {
+    // Fetch all emergency appointments
+    const emergencyAppointments = await Appointment.find({ caseType: 'emergency' })
+      .populate('patient', 'name')
+      .populate('doctor', 'name');
+
+    res.render('pages/appointment/ALL-emergency', {
+      title: 'Emergency Appointments',
+      appointments: emergencyAppointments
+    });
+  } catch (error) {
+    console.error('Error fetching emergency appointments:', error);
+    res.status(500).send('Internal Server Error');
+  }
+}
