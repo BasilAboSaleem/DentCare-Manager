@@ -40,13 +40,7 @@
         </a>
       </li>
 
-      <!-- Profile -->
-      <li class="nav-item">
-        <a class="nav-link" href="/profile">
-          <i class="mdi mdi-account menu-icon"></i>
-          <span class="menu-title">Profile</span>
-        </a>
-      </li>
+      
     
 
     <% } else if (user.role === 'receptionist') { %>
@@ -111,6 +105,34 @@
     <% } %>
 
     <!-- مشترك بين الكل -->
+
+    <li class="nav-item">
+  <a class="nav-link" data-bs-toggle="collapse" href="#visitsMenu" aria-expanded="false" aria-controls="visitsMenu">
+    <i class="mdi mdi-stethoscope menu-icon"></i>
+    <span class="menu-title">Visits</span>
+    <i class="menu-arrow"></i>
+  </a>
+  <div class="collapse" id="visitsMenu">
+    <ul class="nav flex-column sub-menu">
+      <li class="nav-item">
+        <a class="nav-link" href="/visits/today">Today's Visits</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="/visits">All Visits</a>
+      </li>
+    </ul>
+  </div>
+</li>
+
+
+<!-- Profile -->
+      <li class="nav-item">
+        <a class="nav-link" href="/profile">
+          <i class="mdi mdi-account menu-icon"></i>
+          <span class="menu-title">Profile</span>
+        </a>
+      </li>
+
     <li class="nav-item">
       <a class="nav-link" href="/logout">
         <i class="mdi mdi-logout menu-icon"></i>
