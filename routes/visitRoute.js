@@ -1,9 +1,13 @@
 const express = require('express');
 const router = express.Router();
+const multer = require('multer');
+const upload = multer({ dest: 'uploads/' });
 const visitControoler = require('../controllers/visitController');
 const { requireAuth , isDoctor} = require('../middlewares/authMiddlewares');
 
-router.get('/visits/start/:id', requireAuth, isDoctor, visitControoler.start_visit_get);
+
+router.get('/visits/start/:appointmentId', requireAuth, isDoctor, visitControoler.start_visit_get);
+router.post('/visits/start/:appointmentId', requireAuth, isDoctor, upload.single('xrayImage'), visitControoler.start_visit_post);
 
 
 module.exports = router;
