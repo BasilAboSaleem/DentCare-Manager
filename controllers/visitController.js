@@ -106,6 +106,19 @@ exports.start_visit_post = async (req, res) => {
   }
 };
 
+exports.all_visits_get = async (req, res) => {
+  try {
+    const visits = await Visit.find()
+      .populate('patient', 'name')
+      .sort({ visitDate: -1 });
+
+    res.render('pages/visit/all-visits', { title: 'All Visits', visits });
+  } catch (error) {
+    console.error("Error fetching visits:", error);
+    req.flash('error', 'Failed to fetch visits');
+    res.redirect('/patients');
+  }
+}
 
     
  

@@ -8,6 +8,7 @@ const { requireAuth , isDoctor} = require('../middlewares/authMiddlewares');
 
 router.get('/visits/start/:appointmentId', requireAuth, isDoctor, visitControoler.start_visit_get);
 router.post('/visits/start/:appointmentId', requireAuth, isDoctor, upload.single('xrayImage'), visitControoler.start_visit_post);
+router.get('/visits', requireAuth, visitControoler.all_visits_get);
 
 
 module.exports = router;
