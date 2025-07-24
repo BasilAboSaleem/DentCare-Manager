@@ -57,7 +57,7 @@
                               <td><%= appointment.status %></td>
                              <td>
   <a href="/appointments/<%= appointment._id %>" class="btn btn-sm btn-info">View</a>
-  <% if (user.role === 'doctor') { %>
+  <% if (user.role === 'doctor' && appointment.status !== 'completed') { %>
 <a href="/visits/start/<%= appointment._id %>" class="btn btn-sm btn-primary">Start Visit</a>
   <% } %>
 
