@@ -13,7 +13,14 @@ const visitSchema = new mongoose.Schema({
   xrayImageUrl: { type: String, trim: true }, // رابط صورة الأشعة لو في
   extraFees: { type: Number, default: 0 }, 
   additionalFeeReason: { type: String, trim: true },
-  discount: { type: Number, default: 0 }
+  discount: { type: Number, default: 0 },
+  totalAmount: { type: Number, default: 0 }, 
+paidAmount: { type: Number, default: 0 },  
+paymentStatus: {                           
+  type: String,
+  enum: ['unpaid', 'partial', 'paid'],
+  default: 'unpaid'
+}
 });
 
 module.exports = mongoose.model('Visit', visitSchema);
