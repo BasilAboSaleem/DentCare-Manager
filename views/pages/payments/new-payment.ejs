@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+  <%- include('../../partials/head.ejs') %>
+  <body>
+    <div class="container-scroller">
+      <%- include('../../partials/navbar.ejs') %>
+      <div class="container-fluid page-body-wrapper">
+        <%- include('../../partials/sidebar.ejs') %>
+
+        <div class="main-panel">
+          <div class="content-wrapper">
+            <% if (error && error.length > 0) { %>
+              <div class="alert alert-danger"><%= error[0] %></div>
+            <% } %>
+
+            <div class="row">
+              <div class="col-12 grid-margin stretch-card">
+                <div class="card">
+                  <div class="card-body">
+                    <h4 class="card-title">Make Payment</h4>
+                    <p class="card-description">Complete the payment for this visit</p>
+
+                    <form action="/payments/<%= visit._id %>" method="POST">
+                      <div class="form-group">
+                        <label>Patient</label>
+                        <input type="text" class="form-control" value="<%= visit.patient.name %>" readonly>
+                      </div>
+
+                      <div class="form-group">
+                        <label>Total Amount</label>
+                        <input type="text" class="form-control" value="$<%= visit.totalAmount.toFixed(2) %>" readonly>
+                      </div>
+
+                      <div class="form-group">
+                        <label>Already Paid</label>
+                        <input type="text" class="form-control" value="$<%= visit.paidAmount.toFixed(2) %>" readonly>
+                      </div>
+
+                      <div class="form-group">
+                        <label>Remaining Balance</label>
+                        <input type="text" class="form-control" value="$<%= (visit.totalAmount - visit.paidAmount).toFixed(2) %>" readonly>
+                      </div>
+
+                      <div class="form-group">
+                        <label>Amount to Pay Now</label>
+                        <input type="number" name="amount" class="form-control" min="0.5" max="<%= (visit.totalAmount - visit.paidAmount) %>" step="0.5" required>
+                      </div>
+
+                      <div class="form-group">
+                        <label>Payment Method</label>
+                        <select name="method" class="form-control" required>
+                          <option value="cash">Cash</option>
+                          <option value="card">Card</option>
+                          <option value="mixed">Mixed</option>
+                        </select>
+                      </div>
+
+                      <div class="form-group">
+                        <label>Note (optional)</label>
+                        <textarea name="note" class="form-control" rows="2" placeholder="e.g. Partial payment for treatment X"></textarea>
+                      </div>
+
+                      <button type="submit" class="btn btn-success">Submit Payment</button>
+                      <a href="/visits/<%= visit._id %>" class="btn btn-light">Cancel</a>
+                    </form>
+
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+          <%- include('../../partials/footer.ejs') %>
+        </div>
+      </div>
+    </div>
+    <%- include('../../partials/scripts.ejs') %>
+  </body>
+</html>

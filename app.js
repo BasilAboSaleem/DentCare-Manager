@@ -75,6 +75,7 @@ const patientRoute = require('./routes/patientRoute');
 const appointmentRoute = require('./routes/appointmentRoute');
 const treatmentRoute = require('./routes/treatmentRoute');
 const visitRoute = require('./routes/visitRoute');
+const paymentRoute = require('./routes/paymentRoute');
 
 app.use(coreRoute);
 app.use(authRoute);
@@ -82,7 +83,7 @@ app.use(patientRoute);
 app.use(appointmentRoute);
 app.use(treatmentRoute);
 app.use(visitRoute);
-
+app.use(paymentRoute);
 
 
 // Connect DB + Start

@@ -1,3 +1,6 @@
+const mongoose = require('mongoose');
+
+
 const paymentSchema = new mongoose.Schema({
   patient: { type: mongoose.Schema.Types.ObjectId, ref: 'Patient', required: true },
   visit: { type: mongoose.Schema.Types.ObjectId, ref: 'Visit' }, // Optional
@@ -6,3 +9,5 @@ const paymentSchema = new mongoose.Schema({
   paidAt: { type: Date, default: Date.now },
   note: { type: String } // Optional (مثلاً: دفعة على زيارة 3، أو دفعة مسبقة)
 });
+
+const Payment = mongoose.model('Payment', paymentSchema);
