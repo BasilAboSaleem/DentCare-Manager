@@ -120,5 +120,27 @@ exports.all_visits_get = async (req, res) => {
   }
 }
 
+exports.view_visit_get = async (req, res) => {
+  const { visitId } = req.params;
+
+  try {
+    const visit = await Visit.findById(visitId)
+      .populate('patient', 'name')
+      .populate('doctor', 'name role')
+      .populate('treatments');
+
+    if (!visit) {
+      req.flash('error', 'Visit not found');
+      return res.redirect('/visits');
+    }
+
+    res.render('pages/visit/view-visit', { title: 'Visit Details', visit });
+  } catch (error) {
+    console.error("Error fetching visit details:", error);
+    req.flash('error', 'Failed to fetch visit details');
+    res.redirect('/visits'); 
+  }
+};
+
     
  

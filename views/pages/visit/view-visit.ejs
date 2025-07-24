@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+  <%- include('../../partials/head.ejs') %>
+  <body>
+    <div class="container-scroller">
+      <%- include('../../partials/navbar.ejs') %>
+      <div class="container-fluid page-body-wrapper">
+        <%- include('../../partials/sidebar.ejs') %>
+
+        <div class="main-panel">
+          <div class="content-wrapper">
+            <% if (success && success.length > 0) { %>
+              <div class="alert alert-success"><%= success[0] %></div>
+            <% } %>
+
+            <h3>Visit Details</h3>
+
+            <div class="card">
+              <div class="card-body">
+                <h4 class="card-title">Visit Information</h4>
+
+                <dl class="row">
+                  <dt class="col-sm-3">Patient Name:</dt>
+                  <dd class="col-sm-9"><%= visit.patient.name %></dd>
+
+                  <dt class="col-sm-3">Doctor Name:</dt>
+                  <dd class="col-sm-9"><%= visit.doctor.name %></dd>
+
+                  <dt class="col-sm-3">Visit Date:</dt>
+                  <dd class="col-sm-9"><%= new Date(visit.visitDate).toLocaleDateString() %></dd>
+
+                  <dt class="col-sm-3">Diagnosis:</dt>
+                  <dd class="col-sm-9"><%= visit.diagnosis || 'Not provided' %></dd>
+
+                  <dt class="col-sm-3">Treatment Plan:</dt>
+                  <dd class="col-sm-9"><%= visit.treatment || 'Not provided' %></dd>
+
+                  <dt class="col-sm-3">Treatments Used:</dt>
+                  <dd class="col-sm-9">
+                    <% if (visit.treatments && visit.treatments.length > 0) { %>
+                      <ul>
+                        <% visit.treatments.forEach(t => { %>
+                          <li><%= t.name %> — $<%= t.price.toFixed(2) %></li>
+                        <% }) %>
+                      </ul>
+                    <% } else { %>
+                      No treatments selected
+                    <% } %>
+                  </dd>
+
+                  <dt class="col-sm-3">Extra Fees:</dt>
+                  <dd class="col-sm-9">$<%= visit.extraFees.toFixed(2) %></dd>
+
+                  <dt class="col-sm-3">Reason for Extra Fees:</dt>
+                  <dd class="col-sm-9"><%= visit.additionalFeeReason || 'None' %></dd>
+
+                  <dt class="col-sm-3">Discount:</dt>
+                  <dd class="col-sm-9">$<%= visit.discount.toFixed(2) %></dd>
+
+                  <dt class="col-sm-3">Total Amount:</dt>
+                  <dd class="col-sm-9"><strong>$<%= visit.totalAmount.toFixed(2) %></strong></dd>
+
+                  <dt class="col-sm-3">Paid Amount:</dt>
+                  <dd class="col-sm-9">$<%= visit.paidAmount.toFixed(2) %></dd>
+
+                  <dt class="col-sm-3">Payment Status:</dt>
+                  <dd class="col-sm-9">
+                    <% if (visit.paymentStatus === 'paid') { %>
+                      <span class="badge badge-success">Paid</span>
+                    <% } else if (visit.paymentStatus === 'partial') { %>
+                      <span class="badge badge-warning">Partially Paid</span>
+                    <% } else { %>
+                      <span class="badge badge-danger">Unpaid</span>
+                    <% } %>
+                  </dd>
+
+                  <dt class="col-sm-3">X-Ray Image:</dt>
+                  <dd class="col-sm-9">
+                    <% if (visit.xrayImageUrl) { %>
+                      <a href="<%= visit.xrayImageUrl %>" target="_blank">View Image</a>
+                    <% } else { %>
+                      No image uploaded
+                    <% } %>
+                  </dd>
+
+                  <dt class="col-sm-3">Notes:</dt>
+                  <dd class="col-sm-9"><%= visit.notes || 'No additional notes' %></dd>
+                </dl>
+
+                <a href="/visits" class="btn btn-light">Back to All Visits</a>
+
+                <% if (user.role === 'doctor' && visit.paymentStatus === 'unpaid') { %>
+                  <a href="/visits/edit/<%= visit._id %>" class="btn btn-warning">Edit Visit</a>
+                <% } %>
+
+                <% if (user.role === 'receptionist' && visit.paymentStatus !== 'paid') { %>
+                  <a href="/payments/<%= visit._id %>" class="btn btn-success">Make Payment</a>
+                <% } %>
+              </div>
+            </div>
+
+          </div>
+          <%- include('../../partials/footer.ejs') %>
+        </div>
+      </div>
+    </div>
+    <%- include('../../partials/scripts.ejs') %>
+  </body>
+</html>
