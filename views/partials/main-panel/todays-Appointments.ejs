@@ -17,7 +17,7 @@
     vertical-align: middle;
     font-size: 1.1rem;
     color: #111111;
-    font-weight: 600;
+    font-weight: normal; /* غيرت من 600 إلى normal */
   }
 
   .badge {
@@ -46,6 +46,7 @@
                   <th>Date & Time</th>
                   <th>Case Type</th>
                   <th>Status</th>
+                  <th>Actions</th>  <!-- عمود جديد -->
                 </tr>
               </thead>
               <tbody>
@@ -62,10 +63,21 @@
                     <% } %>
                   </td>
                   <td><%= appointment.status %></td>
+                  <td>
+                    <a href="/appointments/<%= appointment._id %>" class="btn btn-sm btn-outline-info me-1">
+                      <i class="mdi mdi-eye"></i> View
+                    </a>
+                    <% if (appointment.status === 'confirmed') { %>
+                       <a href="/visits/start/<%= appointment._id %>" class="btn btn-sm btn-outline-success">
+                      <i class="mdi mdi-play"></i> Start Visit
+                    </a>
+                    <% } %>
+                   
+                  </td>
                 </tr>
                 <% }) %>
                 <% if(appointments.length === 0) { %>
-                <tr><td colspan="5" class="text-center">No appointments today</td></tr>
+                <tr><td colspan="6" class="text-center">No appointments today</td></tr>
                 <% } %>
               </tbody>
             </table>
