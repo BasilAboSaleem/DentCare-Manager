@@ -12,7 +12,7 @@ async function seedUsers() {
       {
         name: 'Dr. Ahmad',
         email: 'doctor@dentcare.local',
-        password: 'doctor123',
+        password: 'Doctor123',
         role: 'doctor',
       },
       {

@@ -2,6 +2,7 @@ const { startOfDay, endOfDay, subDays } = require('date-fns');
 const User = require('../models/User');
 const Appointment = require('../models/Appointment');
 const Patient = require('../models/Patient');
+const bcrypt = require('bcrypt');
 
 exports.index_get = async (req, res) => {
   try {
@@ -49,7 +50,7 @@ exports.index_get = async (req, res) => {
   }
 };
 
-exports.profile_get = async (req, res) => {
+exports.edit_profile_get = async (req, res) => {
   try {
     const userId = req.user._id;
     const user = await User.findById(userId);
@@ -60,7 +61,7 @@ exports.profile_get = async (req, res) => {
       });
     }
 
-    res.render('pages/profile/profile', {
+    res.render('pages/profile/edit-profile', {
       title: 'Profile',
       user
     });
@@ -71,3 +72,41 @@ exports.profile_get = async (req, res) => {
     });
   }
 }
+
+exports.edit_profile_put = async (req, res) => {
+  try {
+    const userId = req.user._id;
+    const { name, email, password, confirmPassword } = req.body;
+
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.status(404).render('pages/error/error-404', {
+        title: 'User Not Found'
+      });
+    }
+
+    // تحديث الاسم والبريد
+    user.name = name?.trim() || user.name;
+    user.email = email?.trim().toLowerCase() || user.email;
+
+    // إذا المستخدم قدّم كلمة مرور جديدة
+    if (password) {
+      if (password !== confirmPassword) {
+        req.flash('error', 'Password and confirmation do not match');
+        return res.redirect('/edit-profile');
+      }
+      const salt = await bcrypt.genSalt(10);
+      user.password = await bcrypt.hash(password, salt);
+    }
+
+    await user.save();
+    req.flash('success', 'Profile updated successfully');
+    res.redirect('/edit-profile');
+  } catch (error) {
+    console.error('Error updating profile:', error);
+    res.status(500).render('pages/error/error-500', {
+      title: 'Internal Server Error'
+    });
+  }
+};
+
