@@ -112,3 +112,24 @@ exports.all_payments_get = async (req, res) => {
     res.status(500).render('pages/error/error-500', { title: 'Error', message: 'An error occurred while fetching all payments' });
   }
 };
+
+exports.today_payments_get = async (req, res) => {
+  try {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0); // بداية اليوم
+    const tomorrow = new Date(today);
+    tomorrow.setDate(tomorrow.getDate() + 1); // بداية اليوم التالي
+
+    const payments = await Payment.find({
+      paidAt: {
+        $gte: today,
+        $lt: tomorrow
+      }
+    }).populate('patient visit');
+
+    res.render('pages/payments/all-payments', { payments, patient: null });
+  } catch (error) {
+    console.error(error);
+    res.status(500).render('pages/error/error-500', { title: 'Error', message: 'An error occurred while fetching today\'s payments' });
+  }
+};

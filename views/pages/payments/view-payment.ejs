@@ -116,6 +116,45 @@
                     <h4 class="card-title">Payment Notes</h4>
                     <p><%= payment.note || 'No additional notes.' %></p>
                   </div>
+                  <% if (payment.visit) { %>
+  <div class="row mt-4">
+    <div class="col-12 grid-margin stretch-card">
+      <div class="card">
+        <div class="card-body">
+          <h4 class="card-title">Related Visit Details</h4>
+          <table class="table table-bordered">
+            <tbody>
+              <tr>
+                <th>Visit Date</th>
+                <td><%= new Date(payment.visit.visitDate).toLocaleDateString() %></td>
+              </tr>
+              <tr>
+                <th>Total Amount</th>
+                <td><%= payment.visit.totalAmount.toFixed(2) %> ₪</td>
+              </tr>
+              <tr>
+                <th>Paid Amount</th>
+                <td><%= payment.visit.paidAmount.toFixed(2) %> ₪</td>
+              </tr>
+              <tr>
+                <th>Payment Status</th>
+                <td><%= payment.visit.paymentStatus %></td>
+              </tr>
+              <tr>
+                <th>Visit ID</th>
+                <td>
+                  <a href="/visits/<%= payment.visit._id %>" class="btn btn-sm btn-primary">
+                    View Visit
+                  </a>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+<% } %>
                 </div>
               </div>
             </div>
