@@ -206,3 +206,70 @@ exports.edit_visit_get = async (req, res) => {
     res.redirect('/visits');
   }
 };
+
+exports.edit_visit_put = async (req, res) => {
+  try{
+    const { visitId } = req.params;
+    const {
+      diagnosis,
+      treatment,
+      treatments,
+      extraFees = 0,
+      additionalFeeReason,
+      discount = 0,
+      notes,
+    } = req.body;
+
+    const treatmentIds = Array.isArray(treatments) ? treatments : treatments ? [treatments] : [];
+
+    const selectedTreatments = await Treatment.find({ _id: { $in: treatmentIds } });
+
+    if (selectedTreatments.length !== treatmentIds.length) {
+      return res.status(400).send('Some treatments are invalid');
+    }
+
+    const extraFeesNum = Number(extraFees) || 0;
+    const discountNum = Number(discount) || 0;
+
+    const treatmentsTotal = selectedTreatments.reduce((sum, t) => sum + t.price, 0);
+    const totalAmount = Math.max(0, treatmentsTotal + extraFeesNum - discountNum);
+
+    const visit = await Visit.findById(visitId);
+    if (!visit) {
+      console.error('Visit not found:', visitId);
+      return res.status(404).render('pages/error/error-404', { title: 'Error', message: 'Visit not found' });
+    }
+
+    let xrayImageUrl = visit.xrayImageUrl; // Keep existing image URL
+    if (req.file) {
+      // Upload new image to Cloudinary
+      const uploadResult = await cloudinary.uploader.upload(req.file.path, {
+        folder: 'dentcare/xray-images',
+        use_filename: true,
+        unique_filename: false,
+      });
+      xrayImageUrl = uploadResult.secure_url; // Update with new image URL
+    }
+
+   visit.diagnosis = typeof diagnosis !== 'undefined' ? diagnosis : visit.diagnosis;
+visit.treatment = typeof treatment !== 'undefined' ? treatment : visit.treatment;
+visit.treatments = treatmentIds.length > 0 ? treatmentIds : visit.treatments;
+visit.extraFees = !isNaN(extraFeesNum) ? extraFeesNum : visit.extraFees;
+visit.discount = !isNaN(discountNum) ? discountNum : visit.discount;
+visit.additionalFeeReason = typeof additionalFeeReason !== 'undefined' ? additionalFeeReason : visit.additionalFeeReason;
+visit.totalAmount = !isNaN(totalAmount) ? totalAmount : visit.totalAmount;
+visit.notes = typeof notes !== 'undefined' ? notes : visit.notes;
+visit.xrayImageUrl = xrayImageUrl || visit.xrayImageUrl; // Update image URL
+
+    await visit.save();
+
+    req.flash('success', 'Visit updated successfully');
+    res.redirect('/visits/' + visit._id);
+
+
+  }
+  catch(error){
+    console.log("Error updating visit:", error);
+    res.status(500).render('pages/error/error-500', { title: 'Error', message: 'Failed to update visit' });
+  }
+}

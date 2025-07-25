@@ -20,7 +20,7 @@
                     <h4 class="card-title">Edit Visit</h4>
                     <p class="card-description">Update visit details below</p>
 
-                    <form action="/visits/edit/<%= visit._id %>?_method=PUT" method="POST">
+                    <form action="/visits/edit/<%= visit._id %>?_method=PUT" method="POST" enctype="multipart/form-data">
                       <div class="form-group">
                         <label for="diagnosis">Diagnosis</label>
                         <textarea class="form-control" id="diagnosis" name="diagnosis" rows="2"><%= visit.diagnosis || '' %></textarea>
@@ -37,8 +37,27 @@
                       </div>
 
                       <div class="form-group">
-                        <label for="xrayImageUrl">X-ray Image URL</label>
-                        <input type="text" class="form-control" id="xrayImageUrl" name="xrayImageUrl" value="<%= visit.xrayImageUrl || '' %>">
+                        <label for="treatments">Treatments</label>
+                        <select multiple class="form-control" id="treatments" name="treatments">
+                          <% allTreatments.forEach(t => { %>
+                            <option value="<%= t._id %>" 
+                              <%= visit.treatments.map(tr => tr._id?.toString?.() || tr.toString()).includes(t._id.toString()) ? 'selected' : '' %>>
+                              <%= t.name %> - ₪<%= t.price %>
+                            </option>
+                          <% }) %>
+                        </select>
+                        <small class="text-muted">Hold Ctrl (Windows) or Command (Mac) to select multiple</small>
+                      </div>
+
+                      <div class="form-group">
+                        <label for="xrayImage">X-ray Image</label>
+                        <input type="file" class="form-control-file" id="xrayImage" name="xrayImage">
+                        <% if (visit.xrayImageUrl) { %>
+                          <div class="mt-2">
+                            <strong>Current Image:</strong><br>
+                            <img src="<%= visit.xrayImageUrl %>" alt="X-ray Image" style="max-width: 200px; border: 1px solid #ccc;">
+                          </div>
+                        <% } %>
                       </div>
 
                       <div class="form-group">
