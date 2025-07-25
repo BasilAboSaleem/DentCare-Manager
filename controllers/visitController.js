@@ -112,7 +112,7 @@ exports.all_visits_get = async (req, res) => {
       .populate('patient', 'name')
       .sort({ visitDate: -1 });
 
-    res.render('pages/visit/all-visits', { title: 'All Visits', visits });
+    res.render('pages/visit/all-visits', { title: 'All Visits', visits, patient: null });
   } catch (error) {
     console.error("Error fetching visits:", error);
     req.flash('error', 'Failed to fetch visits');
@@ -165,5 +165,21 @@ exports.today_visits_get = async (req, res) => {
     res.status(500).render('pages/error/error-500', { title: 'Error', message: 'Failed to fetch today\'s visits' });
   }
 }
-    
- 
+
+exports.patient_visits_get = async (req, res) => {
+  const { patientId } = req.params;
+
+  try {
+    const patient = await Patient.findById(patientId);
+    if (!patient) {
+      req.flash('error', 'Patient not found');
+      return res.redirect('/patients');
+    }
+
+    const visits = await Visit.find({ patient: patientId });
+    res.render('pages/visit/all-visits', { title: 'Patient Visits', patient, visits });
+  } catch (error) {
+    console.error("Error fetching patient's visits:", error);
+    res.status(500).render('pages/error/error-500', { title: 'Error', message: 'Failed to fetch patient\'s visits' });
+  }
+};

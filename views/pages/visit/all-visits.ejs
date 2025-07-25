@@ -23,14 +23,28 @@
                 <div class="card">
                   <div class="card-body">
                     <div class="d-flex justify-content-between align-items-center mb-3">
-                      <input type="text" id="searchInput" class="form-control w-25" placeholder="Search by patient or doctor...">
+                      <input type="text" id="searchInput" class="form-control w-25" placeholder="Search visits...">
                     </div>
-                    <h4 class="card-title">All Visits</h4>
+
+                    <% if (patient) { %>
+                      <h5>
+                        All Visits for 
+                        <span class="text-primary font-weight-bold" style="font-size: 1.2rem;">
+                          <%= patient.name %>
+                        </span>
+                        (<%= visits.length %>)
+                      </h5>
+                    <% } else { %>
+                      <h4 class="card-title">All Visits (<%= visits.length %>)</h4>
+                    <% } %>
+
                     <div class="table-responsive">
                       <table class="table">
                         <thead>
                           <tr>
-                            <th>Patient</th>
+                            <% if (!patient) { %>
+                              <th>Patient</th>
+                            <% } %>
                             <th>Visit Date</th>
                             <th>Total Amount</th>
                             <th>Payment Status</th>
@@ -40,7 +54,9 @@
                         <tbody>
                           <% visits.forEach(visit => { %>
                             <tr>
-                              <td><%= visit.patient.name %></td>
+                              <% if (!patient) { %>
+                                <td><%= visit.patient.name %></td>
+                              <% } %>
                               <td><%= new Date(visit.visitDate).toLocaleDateString() %></td>
                               <td><%= visit.totalAmount.toFixed(2) %></td>
                               <td>
@@ -52,32 +68,29 @@
                                   <span class="badge badge-danger">Unpaid</span>
                                 <% } %>
                               </td>
-                             <td>
-  
-  <a href="/visits/<%= visit._id %>" class="btn btn-sm btn-primary me-1">
-    <i class="mdi mdi-eye"></i> View
-  </a>
+                              <td>
+                                <a href="/visits/<%= visit._id %>" class="btn btn-sm btn-primary me-1">
+                                  <i class="mdi mdi-eye"></i> View
+                                </a>
 
- 
-  <% if (user.role === 'doctor' && visit.paymentStatus === 'unpaid') { %>
-    <a href="/visits/edit/<%= visit._id %>" class="btn btn-sm btn-warning me-1">
-      <i class="mdi mdi-pencil"></i> Edit
-    </a>
-  <% } %>
+                                <% if (user.role === 'doctor' && visit.paymentStatus === 'unpaid') { %>
+                                  <a href="/visits/edit/<%= visit._id %>" class="btn btn-sm btn-warning me-1">
+                                    <i class="mdi mdi-pencil"></i> Edit
+                                  </a>
+                                <% } %>
 
-  
-  <% if (user.role === 'receptionist' && visit.paymentStatus !== 'paid') { %>
-    <a href="/payments/<%= visit._id %>" class="btn btn-sm btn-success">
-      <i class="mdi mdi-cash-multiple"></i> Payment
-    </a>
-  <% } %>
-</td>
-
+                                <% if (user.role === 'receptionist' && visit.paymentStatus !== 'paid') { %>
+                                  <a href="/payments/<%= visit._id %>" class="btn btn-sm btn-success">
+                                    <i class="mdi mdi-cash-multiple"></i> Payment
+                                  </a>
+                                <% } %>
+                              </td>
                             </tr>
                           <% }) %>
                         </tbody>
                       </table>
                     </div>
+
                   </div>
                 </div>
               </div>
@@ -89,32 +102,24 @@
       </div>
     </div>
 
-<script>
-  const searchInput = document.getElementById('searchInput');
-  const rows = document.querySelectorAll('tbody tr');
+    <script>
+      const searchInput = document.getElementById('searchInput');
+      const rows = document.querySelectorAll('tbody tr');
 
-  searchInput.addEventListener('input', function () {
-    const query = this.value.toLowerCase();
-    rows.forEach(row => {
-      const patient = row.children[0].textContent.toLowerCase();
-      const date = row.children[2].textContent.toLowerCase();
-      const total = row.children[3].textContent.toLowerCase();
-      const status = row.children[4].textContent.toLowerCase();
+      searchInput.addEventListener('input', function () {
+        const query = this.value.toLowerCase();
 
-      if (
-        patient.includes(query) ||
-        date.includes(query) ||
-        total.includes(query) ||
-        status.includes(query)
-      ) {
-        row.style.display = '';
-      } else {
-        row.style.display = 'none';
-      }
-    });
-  });
-</script>
+        rows.forEach(row => {
+          const columns = row.querySelectorAll('td');
+          const combinedText = Array.from(columns)
+            .map(col => col.textContent.toLowerCase())
+            .join(' ');
 
-<%- include('../../partials/scripts.ejs') %>
+          row.style.display = combinedText.includes(query) ? '' : 'none';
+        });
+      });
+    </script>
+
+    <%- include('../../partials/scripts.ejs') %>
   </body>
 </html>

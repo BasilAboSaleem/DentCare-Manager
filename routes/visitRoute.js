@@ -11,6 +11,7 @@ router.post('/visits/start/:appointmentId', requireAuth, isDoctor, upload.single
 router.get('/visits', requireAuth, visitControoler.all_visits_get);
 router.get('/visits/today', requireAuth, visitControoler.today_visits_get);
 router.get('/visits/:visitId', requireAuth, visitControoler.view_visit_get);
+router.get('/patients/:patientId/visits', requireAuth, visitControoler.patient_visits_get);
 
 
 module.exports = router;

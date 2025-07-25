@@ -12,10 +12,49 @@
             <% if (error && error.length > 0) { %>
               <div class="alert alert-danger"><%= error[0] %></div>
             <% } %>
-              <% if (success && success.length > 0) { %>
+            <% if (success && success.length > 0) { %>
               <div class="alert alert-success"><%= success[0] %></div>
             <% } %>
 
+            <!-- إحصائيات سريعة -->
+            <div class="row mb-4">
+              <div class="col-md-4 stretch-card">
+                <div class="card bg-primary text-white">
+                  <div class="card-body">
+                    <h5 class="mb-2">Total Visits</h5>
+                    <h3><%= visitsCount || 0 %></h3>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-4 stretch-card">
+                <div class="card bg-success text-white">
+                  <div class="card-body">
+                    <h5 class="mb-2">Total Payments</h5>
+                    <h3><%= totalPayments || 0 %> ₪</h3>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-4 stretch-card">
+                <div class="card bg-danger text-white">
+                  <div class="card-body">
+                    <h5 class="mb-2">Total Debts</h5>
+                    <h3><%= totalDebts || 0 %> ₪</h3>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- أزرار التنقل -->
+            <div class="mb-4">
+              <a href="/patients/<%= patient._id %>/visits" class="btn btn-info mr-2">
+                <i class="mdi mdi-calendar-text"></i> View All Visits
+              </a>
+              <a href="/patients/<%= patient._id %>/payments" class="btn btn-info">
+                <i class="mdi mdi-cash-multiple"></i> View All Payments
+              </a>
+            </div>
+
+            <!-- تفاصيل المريض -->
             <div class="row">
               <div class="col-12 grid-margin stretch-card">
                 <div class="card">
@@ -68,7 +107,6 @@
                     <% if (user.role === 'receptionist') { %>
                       <a href="/patients/<%= patient._id %>/edit" class="btn btn-warning mt-3">Edit Patient</a>
                     <% } %>
-
                   </div>
                 </div>
               </div>

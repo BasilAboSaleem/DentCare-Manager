@@ -1,5 +1,7 @@
 const e = require("express");
 const Patient = require("../models/Patient")
+const Visit = require("../models/Visit");
+const Payment = require("../models/Payment");
 
 exports.all_patients_get = async (req, res) => {
   try {
@@ -69,10 +71,28 @@ exports.view_patient_get = async (req, res) => {
         message: 'The patient you are looking for does not exist.'
       });
     }
+    //عدد الزيارات للمريض
+        const visitsCount = await Visit.countDocuments({ patient: patientId });
+
+            // إجمالي المدفوعات
+    const payments = await Payment.find({ patient: patientId });
+    const totalPayments = payments.reduce((sum, p) => sum + (p.amount || 0), 0);
+
+    // إجمالي الديون = مجموع (totalAmount - paidAmount) لكل الزيارات
+    const visits = await Visit.find({ patient: patientId });
+    const totalDebts = visits.reduce((sum, v) => {
+      const debt = (v.totalAmount || 0) - (v.paidAmount || 0);
+      return sum + (debt > 0 ? debt : 0);
+    }, 0);
+
+  
 
     res.render('pages/patients/view-patient', {
       title: 'Patient Details',
-      patient
+      patient,
+      visitsCount,
+      totalPayments,
+      totalDebts
     });
   }
   catch (err) {
