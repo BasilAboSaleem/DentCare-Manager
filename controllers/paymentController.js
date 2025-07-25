@@ -69,3 +69,20 @@ exports.payment_new_post = async (req, res) => {
     res.status(500).render('pages/error/error-500', { title: 'Error', message: 'An error occurred while processing the payment' });
   }
 };
+
+exports.patient_payments_get = async (req, res) => {
+  const patientId = req.params.patientId;
+
+  try {
+    const patient = await Patient.findById(patientId);
+    if (!patient) {
+      return res.status(404).render('pages/error/error-404', { title: 'Error', message: 'Patient not found' });
+    }
+
+    const payments = await Payment.find({ patient: patientId }).populate('visit');
+    res.render('pages/payments/all-payments', { patient, payments });
+  } catch (error) {
+    console.error(error);
+    res.status(500).render('pages/error/error-500', { title: 'Error', message: 'An error occurred while fetching patient payments' });
+  }
+};

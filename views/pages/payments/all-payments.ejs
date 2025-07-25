@@ -22,19 +22,19 @@
                 <div class="card">
                   <div class="card-body">
                     <div class="d-flex justify-content-between align-items-center mb-3">
-                      <input type="text" id="searchInput" class="form-control w-25" placeholder="Search visits...">
+                      <input type="text" id="searchInput" class="form-control w-25" placeholder="Search payments...">
                     </div>
 
                     <% if (patient) { %>
                       <h5>
-                        All Visits for 
+                        All Payments for 
                         <span class="text-primary font-weight-bold" style="font-size: 1.2rem;">
                           <%= patient.name %>
                         </span>
-                        (<%= visits.length %>)
+                        (<%= payments.length %>)
                       </h5>
                     <% } else { %>
-                      <h4 class="card-title">All Visits (<%= visits.length %>)</h4>
+                      <h4 class="card-title">All Payments (<%= payments.length %>)</h4>
                     <% } %>
 
                     <div class="table-responsive">
@@ -44,43 +44,30 @@
                             <% if (!patient) { %>
                               <th>Patient</th>
                             <% } %>
-                            <th>Visit Date</th>
-                            <th>Total Amount</th>
-                            <th>Payment Status</th>
+                            <th>Payment Date</th>
+                            <th>Amount</th>
+                            <th>Method</th>
+                            <th>Note</th>
                             <th>Actions</th>
                           </tr>
                         </thead>
                         <tbody>
-                          <% visits.forEach(visit => { %>
+                          <% payments.forEach(payment => { %>
                             <tr>
                               <% if (!patient) { %>
-                                <td><%= visit.patient.name %></td>
+                                <td><%= payment.patient.name %></td>
                               <% } %>
-                              <td><%= new Date(visit.visitDate).toLocaleDateString() %></td>
-                              <td><%= visit.totalAmount.toFixed(2) %></td>
+                              <td><%= payment.paidAt ? new Date(payment.paidAt).toLocaleDateString() : 'N/A' %></td>
+                              <td><%= payment.amount.toFixed(2) %></td>
+                              <td><%= payment.method.charAt(0).toUpperCase() + payment.method.slice(1) %></td>
+                              <td><%= payment.note || '-' %></td>
                               <td>
-                                <% if (visit.paymentStatus === 'paid') { %>
-                                  <span class="badge badge-success">Paid</span>
-                                <% } else if (visit.paymentStatus === 'partial') { %>
-                                  <span class="badge badge-warning">Partial</span>
-                                <% } else { %>
-                                  <span class="badge badge-danger">Unpaid</span>
-                                <% } %>
-                              </td>
-                              <td>
-                                <a href="/visits/<%= visit._id %>" class="btn btn-sm btn-primary me-1">
+                                <a href="/payments/<%= payment._id %>" class="btn btn-sm btn-primary me-1">
                                   <i class="mdi mdi-eye"></i> View
                                 </a>
-
-                                <% if (user.role === 'doctor' && visit.paymentStatus === 'unpaid') { %>
-                                  <a href="/visits/edit/<%= visit._id %>" class="btn btn-sm btn-warning me-1">
+                                <% if (user.role === 'receptionist') { %>
+                                  <a href="/payments/edit/<%= payment._id %>" class="btn btn-sm btn-warning me-1">
                                     <i class="mdi mdi-pencil"></i> Edit
-                                  </a>
-                                <% } %>
-
-                                <% if (user.role === 'receptionist' && visit.paymentStatus !== 'paid') { %>
-                                  <a href="/payments/<%= visit._id %>" class="btn btn-sm btn-success">
-                                    <i class="mdi mdi-cash-multiple"></i> Payment
                                   </a>
                                 <% } %>
                               </td>

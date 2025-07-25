@@ -5,5 +5,6 @@ const { requireAuth , isDoctor, isReceptionist} = require('../middlewares/authMi
 
 router.get('/payments/:visitId', requireAuth, isReceptionist, paymentController.payment_new_get);
 router.post('/payments/:visitId', requireAuth, isReceptionist, paymentController.payment_new_post);
+router.get('/patients/:patientId/payments', requireAuth, paymentController.patient_payments_get);
 
 module.exports = router; 
