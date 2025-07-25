@@ -183,3 +183,26 @@ exports.patient_visits_get = async (req, res) => {
     res.status(500).render('pages/error/error-500', { title: 'Error', message: 'Failed to fetch patient\'s visits' });
   }
 };
+
+exports.edit_visit_get = async (req, res) => {
+  const { visitId } = req.params;
+
+  try {
+    const visit = await Visit.findById(visitId)
+      .populate('patient', 'name')
+      .populate('doctor', 'name role')
+      .populate('treatments');
+
+    if (!visit) {
+      req.flash('error', 'Visit not found');
+      return res.redirect('/visits');
+    }
+
+    const allTreatments = await Treatment.find();
+    res.render('pages/visit/edit-visit', { title: 'Edit Visit', visit, allTreatments });
+  } catch (error) {
+    console.error("Error fetching visit for editing:", error);
+    req.flash('error', 'Failed to fetch visit for editing');
+    res.redirect('/visits');
+  }
+};

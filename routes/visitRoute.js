@@ -12,6 +12,7 @@ router.get('/visits', requireAuth, visitControoler.all_visits_get);
 router.get('/visits/today', requireAuth, visitControoler.today_visits_get);
 router.get('/visits/:visitId', requireAuth, visitControoler.view_visit_get);
 router.get('/patients/:patientId/visits', requireAuth, visitControoler.patient_visits_get);
+router.get('/visits/edit/:visitId', requireAuth, isDoctor, visitControoler.edit_visit_get);
 
 
 module.exports = router;
