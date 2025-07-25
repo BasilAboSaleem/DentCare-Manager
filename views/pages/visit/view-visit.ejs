@@ -94,7 +94,7 @@
                 <% } %>
 
                 <% if (user.role === 'receptionist' && visit.paymentStatus !== 'paid') { %>
-                  <a href="/payments/<%= visit._id %>" class="btn btn-success">Make Payment</a>
+                  <a href="/payments-new/<%= visit._id %>" class="btn btn-success">Make Payment</a>
                 <% } %>
               </div>
             </div>

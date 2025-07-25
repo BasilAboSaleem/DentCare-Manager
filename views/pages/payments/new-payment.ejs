@@ -20,7 +20,7 @@
                     <h4 class="card-title">Make Payment</h4>
                     <p class="card-description">Complete the payment for this visit</p>
 
-                    <form action="/payments/<%= visit._id %>" method="POST">
+                    <form action="/payments-new/<%= visit._id %>" method="POST">
                       <div class="form-group">
                         <label>Patient</label>
                         <input type="text" class="form-control" value="<%= visit.patient.name %>" readonly>

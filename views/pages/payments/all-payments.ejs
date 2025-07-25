@@ -65,11 +65,7 @@
                                 <a href="/payments/<%= payment._id %>" class="btn btn-sm btn-primary me-1">
                                   <i class="mdi mdi-eye"></i> View
                                 </a>
-                                <% if (user.role === 'receptionist') { %>
-                                  <a href="/payments/edit/<%= payment._id %>" class="btn btn-sm btn-warning me-1">
-                                    <i class="mdi mdi-pencil"></i> Edit
-                                  </a>
-                                <% } %>
+                            
                               </td>
                             </tr>
                           <% }) %>

@@ -86,3 +86,19 @@ exports.patient_payments_get = async (req, res) => {
     res.status(500).render('pages/error/error-500', { title: 'Error', message: 'An error occurred while fetching patient payments' });
   }
 };
+
+exports.payment_view_get = async (req, res) => {
+  const paymentId = req.params.paymentId;
+
+  try {
+    const payment = await Payment.findById(paymentId).populate('patient visit');
+    if (!payment) {
+      return res.status(404).render('pages/error/error-404', { title: 'Error', message: 'Payment not found' });
+    }
+
+    res.render('pages/payments/view-payment', { payment });
+  } catch (error) {
+    console.error(error);
+    res.status(500).render('pages/error/error-500', { title: 'Error', message: 'An error occurred while fetching payment details' });
+  }
+};

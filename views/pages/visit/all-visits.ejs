@@ -79,7 +79,7 @@
                                 <% } %>
 
                                 <% if (user.role === 'receptionist' && visit.paymentStatus !== 'paid') { %>
-                                  <a href="/payments/<%= visit._id %>" class="btn btn-sm btn-success">
+                                  <a href="/payments-new/<%= visit._id %>" class="btn btn-sm btn-success">
                                     <i class="mdi mdi-cash-multiple"></i> Payment
                                   </a>
                                 <% } %>

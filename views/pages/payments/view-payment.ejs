@@ -1,0 +1,130 @@
+<!-- views/payments/view-payment.ejs -->
+<!DOCTYPE html>
+<html lang="en">
+  <%- include('../../partials/head.ejs') %>
+  <body>
+    <div class="container-scroller">
+      <%- include('../../partials/navbar.ejs') %>
+      <div class="container-fluid page-body-wrapper">
+        <%- include('../../partials/sidebar.ejs') %>
+        <div class="main-panel">
+          <div class="content-wrapper">
+
+            <% if (error && error.length > 0) { %>
+              <div class="alert alert-danger"><%= error[0] %></div>
+            <% } %>
+            <% if (success && success.length > 0) { %>
+              <div class="alert alert-success"><%= success[0] %></div>
+            <% } %>
+
+            <!-- معلومات الدفعة -->
+            <div class="row mb-4">
+              <div class="col-md-4 stretch-card">
+                <div class="card bg-info text-white">
+                  <div class="card-body">
+                    <h5 class="mb-2">Payment Amount</h5>
+                    <h3><%= payment.amount.toFixed(2) %> ₪</h3>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-4 stretch-card">
+                <div class="card bg-success text-white">
+                  <div class="card-body">
+                    <h5 class="mb-2">Payment Method</h5>
+                    <h3><%= payment.method.charAt(0).toUpperCase() + payment.method.slice(1) %></h3>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-4 stretch-card">
+                <div class="card bg-secondary text-white">
+                  <div class="card-body">
+                    <h5 class="mb-2">Paid At</h5>
+                    <h3><%= payment.paidAt ? new Date(payment.paidAt).toLocaleDateString() : 'N/A' %></h3>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- أزرار التنقل -->
+            <div class="mb-4">
+              <a href="/patients/<%= payment.patient._id %>" class="btn btn-info mr-2">
+                <i class="mdi mdi-account"></i> View Patient Details
+              </a>
+              <a href="/payments" class="btn btn-light">
+                <i class="mdi mdi-arrow-left"></i> Back to Payments List
+              </a>
+            </div>
+
+            <!-- تفاصيل المريض المرتبط بالدفعة -->
+            <div class="row">
+              <div class="col-12 grid-margin stretch-card">
+                <div class="card">
+                  <div class="card-body">
+                    <h4 class="card-title">Patient Details</h4>
+                    <p class="card-description">
+                      Associated with payment: <strong><%= payment.patient.name %></strong>
+                    </p>
+
+                    <table class="table table-bordered">
+                      <tbody>
+                        <tr>
+                          <th>Name</th>
+                          <td><%= payment.patient.name %></td>
+                        </tr>
+                        <tr>
+                          <th>Phone</th>
+                          <td><%= payment.patient.phone %></td>
+                        </tr>
+                        <tr>
+                          <th>Address</th>
+                          <td><%= payment.patient.address || 'N/A' %></td>
+                        </tr>
+                        <tr>
+                          <th>Date of Birth</th>
+                          <td>
+                            <% if (payment.patient.dateOfBirth) { %>
+                              <%= payment.patient.dateOfBirth.toLocaleDateString() %>
+                            <% } else { %>
+                              N/A
+                            <% } %>
+                          </td>
+                        </tr>
+                        <tr>
+                          <th>Gender</th>
+                          <td><%= payment.patient.gender ? payment.patient.gender.charAt(0).toUpperCase() + payment.patient.gender.slice(1) : 'N/A' %></td>
+                        </tr>
+                        <tr>
+                          <th>Notes</th>
+                          <td><%= payment.patient.notes || 'N/A' %></td>
+                        </tr>
+                        <tr>
+                          <th>Created At</th>
+                          <td><%= payment.patient.createdAt.toLocaleDateString() %></td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- ملاحظات الدفع -->
+            <div class="row mt-4">
+              <div class="col-12 grid-margin stretch-card">
+                <div class="card">
+                  <div class="card-body">
+                    <h4 class="card-title">Payment Notes</h4>
+                    <p><%= payment.note || 'No additional notes.' %></p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+          <%- include('../../partials/footer.ejs') %>
+        </div>
+      </div>
+    </div>
+    <%- include('../../partials/scripts.ejs') %>
+  </body>
+</html>
