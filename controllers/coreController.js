@@ -2,15 +2,16 @@ const { startOfDay, endOfDay, subDays } = require('date-fns');
 const User = require('../models/User');
 const Appointment = require('../models/Appointment');
 const Patient = require('../models/Patient');
+const Payment = require('../models/Payment');
+const Visit = require('../models/Visit');
 const bcrypt = require('bcrypt');
 
 exports.index_get = async (req, res) => {
   try {
-    // تحديد بداية ونهاية اليوم
     const todayStart = startOfDay(new Date());
     const todayEnd = endOfDay(new Date());
 
-    // الإحصائيات
+    // الإحصائيات العامة
     const totalPatients = await Patient.countDocuments();
     const totalAppointments = await Appointment.countDocuments();
     const todayAppointments = await Appointment.countDocuments({
@@ -19,8 +20,60 @@ exports.index_get = async (req, res) => {
     const emergencyCases = await Appointment.countDocuments({ caseType: 'emergency' });
     const completedVisits = await Appointment.countDocuments({ status: 'completed' });
     const newPatientsCount = await Patient.countDocuments({
-      createdAt: { $gte: subDays(new Date(), 7) } // آخر 7 أيام
+      createdAt: { $gte: subDays(new Date(), 7) }
     });
+
+    // إحصائيات إضافية
+    const todayVisits = await Visit.countDocuments({
+      visitDate: { $gte: todayStart, $lte: todayEnd }
+    });
+
+    const todayPaymentsAgg = await Payment.aggregate([
+      {
+        $match: { paidAt: { $gte: todayStart, $lte: todayEnd } }
+      },
+      {
+        $group: {
+          _id: null,
+          total: { $sum: "$amount" }
+        }
+      }
+    ]);
+    const todayPayments = todayPaymentsAgg[0]?.total || 0;
+
+    const todayDebtsAgg = await Visit.aggregate([
+      {
+        $match: {
+          visitDate: { $gte: todayStart, $lte: todayEnd },
+          paymentStatus: { $ne: 'paid' }
+        }
+      },
+      {
+        $group: {
+          _id: null,
+          total: { $sum: { $subtract: ["$totalAmount", "$paidAmount"] } }
+        }
+      }
+    ]);
+    const todayDebts = todayDebtsAgg[0]?.total || 0;
+
+    const totalPaymentsAgg = await Payment.aggregate([
+      { $group: { _id: null, total: { $sum: "$amount" } } }
+    ]);
+    const totalPayments = totalPaymentsAgg[0]?.total || 0;
+
+    const totalDebtsAgg = await Visit.aggregate([
+      {
+        $match: { paymentStatus: { $ne: 'paid' } }
+      },
+      {
+        $group: {
+          _id: null,
+          total: { $sum: { $subtract: ["$totalAmount", "$paidAmount"] } }
+        }
+      }
+    ]);
+    const totalDebts = totalDebtsAgg[0]?.total || 0;
 
     // مواعيد اليوم
     const appointments = await Appointment.find({
@@ -29,7 +82,6 @@ exports.index_get = async (req, res) => {
       .populate('patient', 'name')
       .populate('doctor', 'name');
 
-    // عرض الصفحة
     res.render('index', {
       title: 'Dashboard',
       appointments,
@@ -39,7 +91,12 @@ exports.index_get = async (req, res) => {
         todayAppointments,
         emergencyCases,
         completedVisits,
-        newPatientsCount
+        newPatientsCount,
+        todayVisits,
+        todayPayments,
+        todayDebts,
+        totalPayments,
+        totalDebts
       }
     });
   } catch (error) {
