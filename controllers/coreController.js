@@ -48,3 +48,26 @@ exports.index_get = async (req, res) => {
     });
   }
 };
+
+exports.profile_get = async (req, res) => {
+  try {
+    const userId = req.user._id;
+    const user = await User.findById(userId);
+
+    if (!user) {
+      return res.status(404).render('pages/error/error-404', {
+        title: 'User Not Found'
+      });
+    }
+
+    res.render('pages/profile/profile', {
+      title: 'Profile',
+      user
+    });
+  } catch (error) {
+    console.error('Error fetching profile:', error);
+    res.status(500).render('pages/error/error-500', {
+      title: 'Internal Server Error'
+    });
+  }
+}
