@@ -102,3 +102,13 @@ exports.payment_view_get = async (req, res) => {
     res.status(500).render('pages/error/error-500', { title: 'Error', message: 'An error occurred while fetching payment details' });
   }
 };
+
+exports.all_payments_get = async (req, res) => {
+  try {
+    const payments = await Payment.find().populate('patient visit');
+    res.render('pages/payments/all-payments', { payments , patient: null });
+  } catch (error) {
+    console.error(error);
+    res.status(500).render('pages/error/error-500', { title: 'Error', message: 'An error occurred while fetching all payments' });
+  }
+};
