@@ -48,17 +48,7 @@ app.use((req, res, next) => {
   res.locals.error = req.flash('error');
   next();
 });
-/*const Setting = require('./models/setting');
-app.use(async (req, res, next) => {
-  try {
-    res.locals.setting = await Setting.findOne();
-    next();
-  } catch (err) {
-    console.error("Error loading settings:", err);
-    res.locals.setting = null;
-    next();
-  }
-});*/
+
 
 // Auto refresh
 const liveReloadServer = livereload.createServer();
