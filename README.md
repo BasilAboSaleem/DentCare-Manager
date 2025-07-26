@@ -111,3 +111,19 @@ Created with ❤️ by **Basil Abu Saleem**
 
 Thank you for visiting.  
 **Every line of code represents not just technical knowledge, but a journey through adversity.**
+
+
+---
+
+## 🧑‍💻 Demo Credentials
+
+Use the following test accounts to explore the system:
+
+### 👨‍⚕️ Doctor Account
+- **Email**: `doctor@dentcare.local`  
+- **Password**: `Doctor123`
+
+### 👩‍💼 Receptionist Account
+- **Email**: `receptionist@dentcare.local`  
+- **Password**: `reception123`
+
