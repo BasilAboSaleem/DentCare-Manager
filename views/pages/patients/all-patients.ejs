@@ -75,9 +75,10 @@
                                     <% if (user.role === 'receptionist') { %>
 
                                   <a href="/patients/<%= patient._id %>/edit" class="btn btn-sm btn-warning">Edit</a>
+                                  <!-- 
                                   <form action="/patients/<%= patient._id %>/delete?_method=DELETE" method="POST" style="display:inline;">
                                     <button class="btn btn-sm btn-danger" onclick="return confirm('Are you sure?')">Delete</button>
-                                  </form>
+                                  </form> -->
                                     <% } %>
                                 </td>
                               </tr>

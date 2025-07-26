@@ -3,7 +3,6 @@ const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 
 
-
 exports.login_get = (req, res) => {
   res.render('pages/auth/login', { title: 'Login' });
 }
